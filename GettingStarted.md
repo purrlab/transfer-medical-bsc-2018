@@ -1,6 +1,6 @@
 # First week of your thesis project
 
-# Problem definition
+## Problem definition
 
 Create an initial problem definition that captures your understanding of the thesis’ goals.
 
@@ -11,7 +11,7 @@ Create an initial problem definition that captures your understanding of the the
 
 Write this down in README.MD
 
-# Lab notebook
+## Lab notebook
 
 Decide on where you are going to keep your lab notebook. This can be an .MD file on Github, Word, Evernote, etc. 
 
@@ -22,7 +22,7 @@ The notebook is for yourself, but you can bring it to the meeting to discuss pro
 self to figure out what you did when you want to write your thesis. 
 
 
-# Literature 
+## Literature 
 
 Decide on where you are going to track of literature. This can be Zotero, Jabref + Evernote, Jabref + Excel, etc. 
 
@@ -30,7 +30,7 @@ When you read any paper, add it to your list, and write down a few notes with a 
 This will also help you with writing your thesis later.
 
 
-# Todo list
+## Todo list
 
 Decide on where you are going to track of all your tasks. This can be on Github (via issues or projects), Todoist, Trello, etc. Make a habit
 of creating tasks for yourself, such that each task can be completed in a few hours. This means the task has to have a verb, and have a definition of "complete".
