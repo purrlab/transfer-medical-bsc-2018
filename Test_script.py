@@ -6,6 +6,8 @@ This is a template
 def function(var):
 	print(var)
 
+"added comment wheeee"
+
 def main():
 	function("test")
 
