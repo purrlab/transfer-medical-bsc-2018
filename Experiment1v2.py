@@ -4,9 +4,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
-from tensorflow.keras.applications import VGG16
+# from tensorflow.applications import VGG16
 import sklearn
 from sklearn import datasets, svm, metrics
+
+# desktop needs this
+
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.Session(config=config)
 
 def get_mnist_data(split = False, norm = True):
 	'''
@@ -25,10 +31,10 @@ def get_mnist_data(split = False, norm = True):
 	y = np.append(y_test,y_train,axis=0)
 	if split:
 		spl = int(split*len(x))
-		x_train = x[:spl]
-		y_train = y[:spl]
-		x_test  = x[spl:]
-		y_test  = y[spl:]
+		x_train = x[spl:]
+		y_train = y[spl:]
+		x_test  = x[:spl]
+		y_test  = y[:spl]
 	else:
 		x_train = x
 		y_train = y
@@ -108,7 +114,7 @@ def svm(x,y):
 			guess.append("False")
 	acc = guess.count("True")/len(guess)
 	print('Accuarcy = ',acc)
-	plt.show()
+	# plt.show()
 	return clf
 
 def plot_epochs(H):
@@ -200,13 +206,28 @@ def Experiment_1(parameters):
 	X_test = (transform_img_list(x_test,data_size[1],data_size[2],data_size[3]))
 	Y,numb_classes = make_pre_train_classes(y_train)
 	# Pre train
-	vgg_conv = VGG16(weights=None,input_shape = (data_size[1],data_size[2],data_size[3]), include_top=True, classes=numb_classes) #top?? 
-	vgg_conv.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-	H = vgg_conv.fit(X[:data_size[0]],Y[:data_size[0]], batch_size=batch_size_manual, epochs=E, validation_split=0.1)
-	model = tf.keras.models.Model(inputs=vgg_conv.input, outputs=vgg_conv.get_layer('fc2').output)
-	#Featurize and SVM
-	predictions = model.predict(X_test[:data_size[0]])
-	clf = svm(predictions,y_test[:data_size[0]])
+	vgg_conv = tf.keras.applications.VGG16(weights=None,input_shape = (data_size[1],data_size[2],data_size[3]), include_top=True, classes=numb_classes) #top?? 
+
+	adm = tf.keras.optimizers.SGD(lr=0.008, momentum=0.0, decay=0.0, nesterov=False)
+
+	vgg_conv.compile(loss='categorical_crossentropy', optimizer=adm, metrics=['accuracy'])
+	if limit:
+		H = vgg_conv.fit(X[:data_size[0]],Y[:data_size[0]], batch_size=batch_size_manual, epochs=E, validation_split=0.1)
+		model = tf.keras.models.Model(inputs=vgg_conv.input, outputs=vgg_conv.get_layer('fc2').output)
+		#Featurize and SVM
+		predictions = model.predict(X_test[:data_size[0]])
+		clf = svm(predictions,y_test[:data_size[0]])
+	else:
+		print(X.shape)
+		print(X_test.shape)
+
+		H = vgg_conv.fit(X,Y, batch_size=batch_size_manual, epochs=E, validation_split=0.1)
+		model = tf.keras.models.Model(inputs=vgg_conv.input, outputs=vgg_conv.get_layer('fc2').output)
+		#Featurize and SVM
+		print(X_test.shape)
+		predictions = model.predict(X_test)
+		clf = svm(predictions,y_test)
+		clf = svm(predictions[:1000],y_test[:1000])
 	# plt.show() # when you uses the show fucntion somewhere halfway, activated it here, so the whole script can run propperly.
 
 
@@ -216,9 +237,9 @@ if __name__ == '__main__':
 	img_size_x = 64
 	img_size_y = 64
 	demension = 1
-	limit = 100
-	Batch_size = 2
-	Epochs = 1
+	limit = False
+	Batch_size = 32
+	Epochs = 10
 	norm = True
 	split = 0.14285714285714285 # (1/7)
 

@@ -2,8 +2,11 @@
 import tensorflow as tf
 import numpy as np
 
-from tensorflow.keras.applications import VGG16
 import cv2
+
+# vgg_conv = tf.keras.models.load_model(r"C:/Users/Floris/Documents/GitHub/DesktopEmpty.model")
+# vgg_conv = tf.keras.models.load_model('Desktop.model')
+vgg_conv = tf.keras.applications.vgg16.VGG16(weights=None, input_shape = (64,64,1), include_top=True, classes=10)
 
 mnist = tf.keras.datasets.mnist
 (x_train, y_train),(x_test, y_test) = mnist.load_data()
@@ -27,7 +30,7 @@ for img in x_test:
     
 X_test = np.array(test_data).reshape(-1,4096)
 
-vgg_conv = VGG16(weights=None,input_shape = (64,64,1), include_top=True, classes=10)
+# vgg_conv = tf.keras.models.load_model('C:\\Users\\Floris\\Documents\\GitHub\\DesktopEmpty.model')
 
 y = []
 for label in y_train:
@@ -55,4 +58,4 @@ Y = np.array(y).reshape(-1,10)
 
 
 vgg_conv.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-H = vgg_conv.fit(X,Y, batch_size=32, epochs=1, validation_split=0.1)
+H = vgg_conv.fit(X,Y, batch_size=32, epochs=32, validation_split=0.1)
