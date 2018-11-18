@@ -65,19 +65,27 @@ Any other topics:
 Date: 18-11-2018
 
 * What did you achieve?
-  Made the whole script, but for just one simple data set. Learnd which basic fucnitons i need for the final experiment. 
+  Made the whole script, but for just one simple data set. Learned which basic fucnitons i need for the final experiment. This took me around 3 days of coding. And 1 day or running some other configs. 
+  Nice to notice that 1000 svm preformed as well as 10000 svm, so de svm does do all the hard work. Val_loss was very low = <0.05 and  val_acc was around > 0.995. Could experiment with differt epochs (did it now with the tenth) and compare results including de val_loss en val_acc ==> overtraining or not.
+  each downtime caused by errors significantly dropped each day.
 
 * What did you struggle with? 
   Needed some weird funcitons, for example: making de interger based class notation to a 0 and 1 based class notation.
   Tensorflow-gpu struggled for a bit, took some unneccasary time.
-  The mnist data set is a small gray scale data set, maybe 
+  The mnist data set is a small gray scale data set (28X28X1).
+  
 
 * What would you like to work on next week?
- Try another data set, maybe mix the two up. try to use differt layers or models.
+ Try another data set, and cross experiment: train en test with different sets. try to use differt layers and epoches.
+ Also see if switching model takes great efforts, just for fun ==> dir(tensorflow.keras.applications).
+ Give some visualisation on results: maybe built a big for loop script running mutiple configs and comparing all outcomes.
+ 
+ Do a small literature search on optimizers and loss functions, just using the basic ones.
 
 
 * Where do you need help from Veronika?
-  
+  --- problem solving is way too much fun. When there is more literature involved, the questions will come :P  --- 
 
 Any other topics:
-  The labbook is still a bit unclear, the versions are very rough. is that bad? 
+  The labbook feels pretty obsolete the versions are very rough. is that bad?
+  
