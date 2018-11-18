@@ -138,7 +138,7 @@ def plot_epochs(H):
 	plt.ylabel('loss')
 	plt.xlabel('epoch')
 	plt.legend(['train', 'test'], loc='upper left')
-	# plt.show()
+	plt.show()
 
 def Random_score(y):
 	'''
@@ -228,6 +228,7 @@ def Experiment_1(parameters):
 		predictions = model.predict(X_test)
 		clf = svm(predictions,y_test)
 		clf = svm(predictions[:1000],y_test[:1000])
+		plot_epochs(H)
 	# plt.show() # when you uses the show fucntion somewhere halfway, activated it here, so the whole script can run propperly.
 
 
