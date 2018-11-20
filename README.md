@@ -1,13 +1,20 @@
-Hoofd vraag
+__Wat ga ik onderzoeken__
+Een systimatische aanpak met betrekking tot transfer learning. dit houdt in dat ik het zelfde model en techniek gebruik om verschillende data sets te testen. Later zullen modelen veranderen tegenover zelfde data en zelfde techniek. Uit eindelijk kan er gekeken worden naar verschillende technieken. 
+
+__Hoofdvraag__
 Wat is de invloed van de pre trrain data set op de test data set.
-Sub: Heeft grootte van de data set veel invloed
-Sub: heeft het aantal classificaties invloed op het resultaat
-Sub: Heeft de test_loss invloed? __> datagenerator vs. Kleine set veel epochs.
-Eigelijk een paar parameters vinden die er voor zorgen dat jij kan zeggen dat je transferlearing model een goede match is.
-BEP
+
+Sub: Is er en samen hang tussen resultaat/nauwkeurigheid en pre tain/test data grootte.
+Sub: Is er en samen hang tussen resultaat/nauwkeurigheid en pre tain/test data classificatie aantal.
+Sub: Is er en samen hang tussen resultaat/nauwkeurigheid en pre tain val_loss.
+
+__Idealiter: "Eigelijk een paar parameters vinden die er voor zorgen dat jij kan zeggen dat je transferlearing model een goede match is."__
+
+__BEP__
 Met Verschillende datasets en varianten daarvan, transfer learning toepassen op VGG16 met feature extraction. Deze resultaten dan vergelijken tegenover gekozen parameters zoals lengte data set etc. 
-Eerst zullen er 2 korte experimenten plaats vinden, in het vervolg zal er   
-Progameer doelen
+Eerst zullen er 2 korte experimenten plaats vinden. Dan zullen de functies gekozen worden en gespecialiseerd worden, tevens een run script.
+
+__Progameer doelen__
 Hierin zal omschreven staan wat er  zal worden geprogrammeerd in python. Met de versies komt er meer diepgang in.
 Doel
 Het doel van het script klinkt als volgt:
