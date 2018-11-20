@@ -87,5 +87,34 @@ Date: 18-11-2018
   --- problem solving is way too much fun. When there is more literature involved, the questions will come :P  --- 
 
 Any other topics:
-  The labbook feels pretty obsolete the versions are very rough. is that bad?
+  The labbook feels pretty obsolete the versions are very rough. is that bad?\
+  
+  ## Week 3
+### Date: 24-09-2018
+
+#### What did you achieve?
+
+* Replace this text with a bullet point list of what you achieved this week.
+* It's ok if your list is only one bullet point long!
+
+#### What did you struggle with?
+
+* Replace this text with a bullet point list of where you struggled this week.
+* It's ok if your list is only one bullet point long!
+
+#### What would you like to work on next week?
+
+* Replace this text with a bullet point list of what you would like to work on next week.
+* It's ok if your list is only one bullet point long!
+* Try to estimate how long each task will take.
+
+#### Where do you need help from Kirstie?
+
+* Replace this text with a bullet point list of what you need help from Kirstie on.
+* It's ok if your list is only one bullet point long!
+* Try to estimate how long each task will take.
+
+#### Any other topics
+
+This space is yours to add to as needed.
   
