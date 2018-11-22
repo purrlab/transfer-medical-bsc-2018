@@ -31,7 +31,7 @@ def transform_img_list(X,img_size_x,img_size_y,demension):
 	for img in X:
 	    resized_image = cv2.resize(img, (img_size_x, img_size_y))
 	    train_data.append(resized_image)
-	    
+
 	X = np.array(train_data).reshape(-1,img_size_x,img_size_y,demension)
 	return X
 
@@ -40,7 +40,7 @@ def make_pre_train_classes(Y, numb_classes = None):
 	zorgt voor classes op een manier dat een NN er mee kan werken, deze versie werkt op INTERGERS
 	input: lijst met interger classes
 	outpt: 0'en en 1'en lijst, even lang als classes aantal
-	''' 
+	'''
 	clas = list()
 	if not numb_classes:
 		numb_classes = max(Y)-min(Y)+1
@@ -132,7 +132,7 @@ def Experiment_1():
 	X = transform_img_list(x_train,img_size_x,img_size_y,demension)
 	X_test = (transform_img_list(x_test,img_size_x,img_size_y,demension))#np.array#.reshape(-1,img_size_x*img_size_y)
 	Y,numb_classes = make_pre_train_classes(y_train)
-	vgg_conv = VGG16(weights=None,input_shape = (img_size_x,img_size_y,demension), include_top=True, classes=numb_classes) #top?? 
+	vgg_conv = VGG16(weights=None,input_shape = (img_size_x,img_size_y,demension), include_top=True, classes=numb_classes) #top??
 	vgg_conv.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 	H = vgg_conv.fit(X[:limit],Y[:limit], batch_size=batch_size_manual, epochs=E, validation_split=0.1)
 	model = tf.keras.models.Model(inputs=vgg_conv.input, outputs=vgg_conv.get_layer('fc2').output)

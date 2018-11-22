@@ -41,7 +41,7 @@ def get_mnist_data(split = False, norm = True):
 		x_test  = 0
 		y_test  = 0
 
-	if norm:	
+	if norm:
 		x_train, x_test = x_train / 255.0, x_test / 255.0
 	return x_train, y_train, x_test, y_test
 
@@ -62,7 +62,7 @@ def transform_img_list(X,img_size_x,img_size_y,demension):
 	for img in X:
 	    resized_image = cv2.resize(img, (img_size_x, img_size_y))
 	    train_data.append(resized_image)
-	    
+
 	X = np.array(train_data).reshape(-1,img_size_x,img_size_y,demension)
 	return X
 
@@ -71,7 +71,7 @@ def make_pre_train_classes(Y, numb_classes = None):
 	zorgt voor classes op een manier dat een NN er mee kan werken, deze versie werkt op INTERGERS
 	input: lijst met interger classes
 	outpt: 0'en en 1'en lijst, even lang als classes aantal
-	''' 
+	'''
 	try:
 		int(Y[0])
 	except Exception as e:
@@ -199,14 +199,14 @@ def Experiment_1(parameters):
 	split = parameters[4]
 	norm = parameters[3]
 
-	## Run Functions ## 
+	## Run Functions ##
 	# Prep data
 	x_train, y_train, x_test, y_test = get_mnist_data(split, norm)
 	X = transform_img_list(x_train,data_size[1],data_size[2],data_size[3])
 	X_test = (transform_img_list(x_test,data_size[1],data_size[2],data_size[3]))
 	Y,numb_classes = make_pre_train_classes(y_train)
 	# Pre train
-	vgg_conv = tf.keras.applications.VGG16(weights=None,input_shape = (data_size[1],data_size[2],data_size[3]), include_top=True, classes=numb_classes) #top?? 
+	vgg_conv = tf.keras.applications.VGG16(weights=None,input_shape = (data_size[1],data_size[2],data_size[3]), include_top=True, classes=numb_classes) #top??
 
 	adm = tf.keras.optimizers.SGD(lr=0.008, momentum=0.0, decay=0.0, nesterov=False)
 
