@@ -1,9 +1,9 @@
 
 
 ## Import all scripts ##
-from Datasets import import_mnist, import_dogcat, pre_processing, make_pre_train_classes
-from PreTrain import make_model,train_model, config_desktop
-from TransferLearn import get_feature_vector, preform_svm
+from 2Datasets import import_mnist, import_dogcat, pre_processing, make_pre_train_classes
+from 3PreTrain import make_model,train_model, config_desktop
+from 4TransferLearn import get_feature_vector, preform_svm
 # from AnalyseData import AnalyseDataClass, plot_pre_train_result
 
 
