@@ -37,6 +37,36 @@ def train_model(model,X,Y,):
 	# train models over AUC, for x epochs. make it loopable for further test. return plottable data
 	H = model.fit(X,Y, batch_size=batch_size_manual, epochs=E, validation_split=0.1)
 
+#option 1
+def dataGenerator(pathes, batch_size):
+
+    while True: #generators for keras must be infinite
+        for path in pathes:
+            x_train, y_train = prepare_data(path)
+
+            totalSamps = x_train.shape[0]
+            batches = totalSamps // batch_size
+
+            if totalSamps % batch_size > 0:
+                batches+=1
+
+            for batch in range(batches):
+                section = slice(batch*batch_size,(batch+1)*batch_size)
+                yield (x_train[section], y_train[section])
+                
+#Create and use:
+
+# gen = dataGenerator(['xaa', 'xab', 'xac', 'xad'], 50)
+# model.fit_generator(gen,
+#                     steps_per_epoch = expectedTotalNumberOfYieldsForOneEpoch
+#                     epochs = epochs)
+
+# Option 2
+# for epoch in range(20):
+#     for path in ['xaa', 'xab', 'xac', 'xad']:
+#         x_train, y_train = prepare_data(path)
+#         model.fit(x_train, y_train, batch_size=50, epochs=epoch+1, initial_epoch=epoch, shuffle=True)
+
 def config_desktop():
 	## WHEN USING TF 1.5 or lower and GPU ###
 	config = tf.ConfigProto()               #

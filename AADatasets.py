@@ -59,7 +59,7 @@ def import_dogcat(data_dir,cat,img_size_x,img_size_y, split, norm, limit = 100, 
 		x_train, x_test = x_train / 255.0, x_test / 255.0
 	return x_train, y_train, x_test, y_test
 
-def import_mnist(split, norm):
+def import_mnist(split, norm, limit = None):
 	'''
 	Creert data set van de mnist data.
 	input: Normalize boolean
@@ -86,9 +86,20 @@ def import_mnist(split, norm):
 		x_test  = 0
 		y_test  = 0
 
+	if limit > len(y_test) or limit > len(y_train):
+		print("Limit is to high, limit is turned off")
+		limit = None
+
 	if norm:
 		x_train, x_test = x_train / 255.0, x_test / 255.0
-	return x_train, y_train, x_test, y_test
+
+	if not limit:
+		limit = len(y_train)
+		limit2 = len(y_test)
+	else:
+		limit2 = limit
+
+	return x_train[:limit], y_train[:limit], x_test[:limit2], y_test[:limit2]
 
 
 def train_val_test():
@@ -125,9 +136,7 @@ def make_pre_train_classes(Y, numb_classes = None):
 		int(Y[0])
 	except Exception as e:
 		raise e
-	else:
-		print('Please give classes in compatible type(), int, unti8')
-
+	
 	clas = list()
 	if not numb_classes:
 		numb_classes = int(max(list(Y))-min(list(Y))+1)
