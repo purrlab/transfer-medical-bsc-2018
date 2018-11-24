@@ -8,22 +8,92 @@ import sklearn
 from sklearn import datasets, svm, metrics
 import os
 import random
+import pandas
 
-def import_data():
-	# melanoom, --mnist--, (nog een van paper melagoo) en catDog
-	pass
+def import_melanoom(data_dir,img_size_x,img_size_y, split, norm, limit = False, color = False):
+	### get data ground truth ###
+	df = pandas.read_csv(r"C:\Users\Floris\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")
+	df = df.set_index("image_id")
 
-def import_dogcat(data_dir,cat,img_size_x,img_size_y, split, norm, limit = 100, color = False):
+	# data_dir=r"C:\Users\s147057\Documents\Python Scripts\ISIC-2017_Training_Data"
+	training_data = []
+	target_data = []
+	x = 0
+	D = 1
+	for img in os.listdir(data_dir)[1:]:
+		if 'superpixels' in img:
+			continue
+		try:
+			
+			class_num = df.loc[img[0:-4],:]
+			if class_num[0] == 1:
+				class_num = [0,1,0]
+			elif class_num[1] == 1:
+				class_num = [0,0,1]
+			else:
+				class_num = [1,0,0]
+
+			if color:
+				img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_COLOR)
+				D = 3
+				new_array = cv2.resize(img_array,(img_size_x, img_size_y))
+			else:
+				img_array = cv2.imread(os.path.join(data_dir,img), cv2.IMREAD_GRAYSCALE)
+				D = 1
+				new_array = cv2.resize(img_array,(img_size_x, img_size_y))
+			new_array = cv2.resize(img_array,(img_size_x, img_size_y))
+			training_data.append(new_array)
+			target_data.append(class_num)
+		except Exception as e:
+			pass
+		x+=1
+		if limit:
+			if x > limit: #len(df):
+				break
+	x = np.array(training_data).reshape(-1,img_size_x, img_size_y,D)
+	y = np.array(target_data).reshape(-1,1)
+
+	if type(split) != float:
+		print("please enter 'float' for split")
+	if type(norm) != bool:
+		print("please enter 'boolean' for norm(alization)")
+
+	if split:
+		spl = int(split*len(x))
+		x_train = x[spl:]
+		y_train = y[spl:]
+		x_test  = x[:spl]
+		y_test  = y[:spl]
+	else:
+		x_train = x
+		y_train = y
+		x_test  = 0
+		y_test  = 0
+
+	if norm:
+		x_train, x_test = x_train / 255.0, x_test / 255.0
+	print('Classes are in binary')
+	return x_train, y_train, x_test, y_test
+
+def import_dogcat(data_dir,cat,img_size_x,img_size_y, split, norm, limit = False, color = False):
 	training_data = list()
 	training_class = list()
+
 	for category in cat:
 		path = os.path.join(data_dir, category)
 		class_num = cat.index(category)
+		path = os.path.join(data_dir, category)
+		if limit:
+			limit = limit/2
+		else:
+			limit = len(os.listdir(path))
+
 		for img in os.listdir(path)[:limit]:
 			try:
 				if color:
 					img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_COLOR)
 					D = 3
+					new_array = cv2.resize(img_array,(img_size_x, img_size_y))
 				else:
 					img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_GRAYSCALE)
 					D = 1
@@ -86,7 +156,7 @@ def import_mnist(split, norm, limit = None):
 		x_test  = 0
 		y_test  = 0
 
-	if limit > len(y_test) or limit > len(y_train):
+	if limit > len(y_train):
 		print("Limit is to high, limit is turned off")
 		limit = None
 
@@ -95,11 +165,8 @@ def import_mnist(split, norm, limit = None):
 
 	if not limit:
 		limit = len(y_train)
-		limit2 = len(y_test)
-	else:
-		limit2 = limit
 
-	return x_train[:limit], y_train[:limit], x_test[:limit2], y_test[:limit2]
+	return x_train[:limit], y_train[:limit], x_test, y_test
 
 
 def train_val_test():

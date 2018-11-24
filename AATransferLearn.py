@@ -49,7 +49,7 @@ def preform_svm(x,y,x_val,y_val):
 	# plt.show()
 	return clf
 
-def auc_svm(X_train,y_train,X_test,y_test):
+def auc_svm(X_train,y_train,X_test,y_test, plot = True):
 	try:
 		s = X_train.shape
 		X_train = np.array(X_train).reshape(-1,int(s[1])*int(s[2]))
@@ -78,6 +78,25 @@ def auc_svm(X_train,y_train,X_test,y_test):
 	fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
 	roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
 
+
+	# Compute macro-average ROC curve and ROC area
+
+	# First aggregate all false positive rates
+	all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
+
+	# Then interpolate all ROC curves at this points
+	mean_tpr = np.zeros_like(all_fpr)
+	for i in range(n_classes):
+		mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+
+	# Finally average it and compute AUC
+	mean_tpr /= n_classes
+
+	fpr["macro"] = all_fpr
+	tpr["macro"] = mean_tpr
+	roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
+
+
 	plt.figure()
 	lw = 2
 	plt.plot(fpr[2], tpr[2], color='darkorange',
@@ -89,7 +108,10 @@ def auc_svm(X_train,y_train,X_test,y_test):
 	plt.ylabel('True Positive Rate')
 	plt.title('Receiver operating characteristic example')
 	plt.legend(loc="lower right")
-	plt.show()
+	if plot:
+		plt.show()
+
+	return roc_auc
 
 def main():
 	# small example to test script
