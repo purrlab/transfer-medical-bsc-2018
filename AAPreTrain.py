@@ -24,10 +24,19 @@ from sklearn import metrics
 #     s = ptas*binSizes
 #     return K.sum(s, axis=0)
 
-def make_model(x, y, numb_classes, w = None):
-	
+def make_model(x, numb_classes, w = None):
+	if w != None:
+		classes = 1000
+	else:
+		classes = numb_classes
+
 	# make and compile vgg16 model with correct parameters
-	vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=numb_classes) #top??
+	vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=classes) #top??
+	if w != None:
+		model = tf.keras.models.Sequential()
+		model.add(tf.keras.layers.Dense(numb_classes, input_shape = (1000,1)))
+		model.add(tf.keras.layers.Activation('sigmoid'))
+		vgg_conv = tf.keras.models.Model(inputs=[vgg_conv.input],outputs=[model.output])
 	adm = tf.keras.optimizers.SGD(lr=0.008, momentum=0.0, decay=0.0, nesterov=False)
 	vgg_conv.compile(loss='categorical_crossentropy', optimizer=adm, metrics=['accuracy'])  #'auc'
 

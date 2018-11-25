@@ -45,8 +45,8 @@ def import_melanoom(img_size_x,img_size_y, norm, color = False):
 				class_num = [1,0,0]
 
 			if color:
-				img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_COLOR)
 				D = 3
+				img_array = cv2.imread(os.path.join(data_dir,img), cv2.IMREAD_COLOR)
 				new_array = cv2.resize(img_array,(img_size_x, img_size_y))
 			else:
 				img_array = cv2.imread(os.path.join(data_dir,img), cv2.IMREAD_GRAYSCALE)
@@ -85,7 +85,7 @@ def import_melanoom(img_size_x,img_size_y, norm, color = False):
 	print(f"This melanoom dataset contains the following: \nTotal length Dataset = {len(x)} \nTotal length train set = {len(x_train)} \nTotal length val set = {len(x_val)} \nTotal length test set= {len(x_test)}")
 	return x_train, y_train, x_val, y_val, x_test, y_test
 
-def import_dogcat(img_size_x,img_size_y, norm, color = False):
+def import_dogcat(img_size_x,img_size_y, norm, color):
 	try: 
 		DIR = r"C:\Users\Floris\Documents\Python scripts\PetImages"
 		cat = list(os.listdir(DIR))
@@ -107,12 +107,14 @@ def import_dogcat(img_size_x,img_size_y, norm, color = False):
 		for img in os.listdir(path):
 			try:
 				if color:
-					img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_COLOR)
 					D = 3
+					img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_COLOR)
 					new_array = cv2.resize(img_array,(img_size_x, img_size_y))
+					
 				else:
-					img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_GRAYSCALE)
 					D = 1
+					img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_GRAYSCALE)
+					
 					new_array = cv2.resize(img_array,(img_size_x, img_size_y))
 				training_data.append(new_array)
 				training_class.append(class_num)

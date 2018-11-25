@@ -66,7 +66,7 @@ def run_experiment2(name_data,name_data2, vgg, img_size_x, img_size_y, demension
 
 def run_experiment3(name_data,name_data2, img_size_x, img_size_y, demension, Batch_size, Epochs, norm, train_size):
 
-	x_train, y_train, x_val, y_val, x_test, y_test, x_train2, y_train2, x_val2, y_val2, x_test2, y_test2 = get_data(name_data,name_data2 ,img_size_x,img_size_y, norm)
+	x_train, y_train, x_val, y_val, x_test, y_test, x_train2, y_train2, x_val2, y_val2, x_test2, y_test2 = get_data(name_data,name_data2 ,img_size_x,img_size_y, norm, color = True)
 
 	# if x_train != None:
 	# x_train = pre_processing(x_train, img_size_x, img_size_y, demension)
@@ -82,7 +82,7 @@ def run_experiment3(name_data,name_data2, img_size_x, img_size_y, demension, Bat
 	# else:
 	# 	print("dataset 2 not found")
 	results = []
-	model = make_model(x, y, numb_classes, w = 'imagenet')
+	model = make_model(x_train2, 3, w = 'imagenet')
 	# # if not model:
 	# model = make_model(x_train, y_train, numb_classes)
 	H, score = train_model(model,x_train2,y_train2,x_test2,y_test2, Epochs, Batch_size)
@@ -136,7 +136,7 @@ if __name__ == '__main__':
 	# plt.title('Dataset len and auc of svm')
 	# plt.show()
 
-	r = run_experiment3('none','mela', img_size_x=224, img_size_y=224, demension=1, Batch_size=12, Epochs=20, norm=False, train_size = [2000])
+	r = run_experiment3('none','mela', img_size_x=224, img_size_y=224, demension=3, Batch_size=12, Epochs=20, norm=False, train_size = [2000])
 	print(r) 
 	plt.plot(r, [500,2500,5000,10000,15000,20000])
 	plt.title('Dataset len and auc of svm')
