@@ -94,27 +94,29 @@ Any other topics:
 
 #### What did you achieve?
 
-* Replace this text with a bullet point list of what you achieved this week.
-* It's ok if your list is only one bullet point long!
+* Made 4 main scripts, 1 file in which i run everyting and can ajust de order and parameters of the functions
+* Made a AUC for the SVM, made a auc for the model based on results.
+* Tried to immitate experiments conducted from the melago project. 
 
 #### What did you struggle with?
 
-* Replace this text with a bullet point list of where you struggled this week.
-* It's ok if your list is only one bullet point long!
+* Github desktop got stuck
+* Retinopathy was to big for my pc 83 GB.
+* Atlas didn't succeed in such a small time frame
+* AUC optimizing isn't possible with keras, tried to do it custom, but keep recieving error. could switch to tensorflow instead of tensorflow.keras, with TF there are more possibilities.
 
 #### What would you like to work on next week?
 
-* Replace this text with a bullet point list of what you would like to work on next week.
-* It's ok if your list is only one bullet point long!
-* Try to estimate how long each task will take.
+* Get AUC optimalizatoin working
+* Swap my SSD for a bigger one (already got it, but takes a while to transfer)
+* Try to get some data sets ready for testing
 
-#### Where do you need help from Kirstie?
+#### Where do you need help from Veronika?
 
-* Replace this text with a bullet point list of what you need help from Kirstie on.
-* It's ok if your list is only one bullet point long!
-* Try to estimate how long each task will take.
+* AUC optimalization for keras? 
+* evaluate the script for bad habits and 
 
 #### Any other topics
 
-This space is yours to add to as needed.
-  
+I did not really achieve to mimic the results, is this now a new top priority or isnt it? 
+
