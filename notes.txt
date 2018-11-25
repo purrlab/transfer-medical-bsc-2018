@@ -1,0 +1,20 @@
+
+from sklearn.metrics import roc_auc_score
+score = roc_auc_score(y_test, model.predict(X_test))
+print("Total roc auc score = {0:0.4f}".format(score))
+
+train model --> still uses split instead of test_train
+
+test train val --> need to adjust option
+
+load data --> become just one function 
+
+all functions must use same data structure binary and np.array. 
+
+better loopable en visability, better solution for the desktop thing. (Try excepts.)
+
+
+trein: 
+- wat does vebrose and np epoch do? 
+- wat happens if you dont use a metric? 
+- wat are normal values for AUC?

@@ -10,17 +10,28 @@ import os
 import random
 import pandas
 
-def import_melanoom(data_dir,img_size_x,img_size_y, split, norm, limit = False, color = False):
+def import_melanoom(img_size_x,img_size_y, norm, train_size, color = False):
+	try: 
+		DIR = r"C:\Users\Floris\Documents\Python Scripts\ISIC-2017_Training_Data"
+		os.listdir(DIR)
+		data_dir = DIR
+		print('Desktop detected')
+	except:
+		DIR = r"C:\Users\s147057\Documents\Python Scripts\ISIC-2017_Training_Data"
+		print('Laptop detected')
+		data_dir = DIR
+
 	### get data ground truth ###
-	df = pandas.read_csv(r"C:\Users\Floris\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")
+	df = pandas.read_csv(r"C:\Users\S147057\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")
 	df = df.set_index("image_id")
 
 	# data_dir=r"C:\Users\s147057\Documents\Python Scripts\ISIC-2017_Training_Data"
 	training_data = []
 	target_data = []
-	x = 0
-	D = 1
-	for img in os.listdir(data_dir)[1:]:
+
+	L = os.listdir(data_dir)
+	L.reverse() # omdraaien van de lijst zorgt voor meer diversiteit van classes. 
+	for img in L[:-1]:
 		if 'superpixels' in img:
 			continue
 		try:
@@ -46,36 +57,46 @@ def import_melanoom(data_dir,img_size_x,img_size_y, split, norm, limit = False, 
 			target_data.append(class_num)
 		except Exception as e:
 			pass
-		x+=1
-		if limit:
-			if x > limit: #len(df):
-				break
-	x = np.array(training_data).reshape(-1,img_size_x, img_size_y,D)
-	y = np.array(target_data).reshape(-1,1)
 
-	if type(split) != float:
-		print("please enter 'float' for split")
+	x = np.array(training_data).reshape(-1,img_size_x, img_size_y,D)
+	y = np.array(target_data).reshape(-1,3)
+
 	if type(norm) != bool:
 		print("please enter 'boolean' for norm(alization)")
 
-	if split:
-		spl = int(split*len(x))
-		x_train = x[spl:]
-		y_train = y[spl:]
-		x_test  = x[:spl]
-		y_test  = y[:spl]
-	else:
-		x_train = x
-		y_train = y
-		x_test  = 0
-		y_test  = 0
+	test_split = 0.25
+	val_split = 0.1
+
+	spl = int(test_split*len(x))
+	X = x[spl:]
+	Y = y[spl:]
+	x_test  = x[:spl]
+	y_test  = y[:spl]
+
+	spl2 = int(val_split*len(X))
+	x_val = x[:spl2]
+	y_val = y[:spl2]
+	x_train = X[spl2:]
+	y_train = Y[spl2:]
 
 	if norm:
-		x_train, x_test = x_train / 255.0, x_test / 255.0
-	print('Classes are in binary')
-	return x_train, y_train, x_test, y_test
+		x_train, x_val, x_test = x_train / 255.0, x_val / 255.0, x_test / 255.0
 
-def import_dogcat(data_dir,cat,img_size_x,img_size_y, split, norm, limit = False, color = False):
+	print(f"This melanoom dataset contains the following: \nTotal length Dataset = {len(x)} \nTotal length train set = {len(x_train)} \nTotal length val set = {len(x_val)} \nTotal length test set= {len(x_test)}")
+	return x_train, y_train, x_val, y_val, x_test, y_test
+
+def import_dogcat(img_size_x,img_size_y, norm, train_size, color = False):
+	try: 
+		DIR = r"C:\Users\Floris\Documents\Python scripts\PetImages"
+		cat = list(os.listdir(DIR))
+		data_dir = DIR
+		print('Desktop detected')
+	except:
+		DIR = r"C:\Users\s147057\Documents\Python scripts\PetImages"
+		cat = list(os.listdir(DIR))
+		print('Laptop detected')
+		data_dir = DIR
+
 	training_data = list()
 	training_class = list()
 
@@ -83,12 +104,7 @@ def import_dogcat(data_dir,cat,img_size_x,img_size_y, split, norm, limit = False
 		path = os.path.join(data_dir, category)
 		class_num = cat.index(category)
 		path = os.path.join(data_dir, category)
-		if limit:
-			limit = limit/2
-		else:
-			limit = len(os.listdir(path))
-
-		for img in os.listdir(path)[:limit]:
+		for img in os.listdir(path):
 			try:
 				if color:
 					img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_COLOR)
@@ -108,26 +124,31 @@ def import_dogcat(data_dir,cat,img_size_x,img_size_y, split, norm, limit = False
 	x = np.array(training_data).reshape(-1,img_size_x, img_size_y,D)
 	y = np.array(training_class).reshape(-1,1)
 
-	if type(split) != float:
-		print("please enter 'float' for split")
 	if type(norm) != bool:
 		print("please enter 'boolean' for norm(alization)")
 
-	if split:
-		spl = int(split*len(x))
-		x_train = x[spl:]
-		y_train = y[spl:]
-		x_test  = x[:spl]
-		y_test  = y[:spl]
-	else:
-		x_train = x
-		y_train = y
-		x_test  = 0
-		y_test  = 0
+	test_split = 0.25
+	val_split = 0.1
+
+	spl = int(test_split*len(x))
+	X = x[spl:]
+	Y = y[spl:]
+	x_test  = x[:spl]
+	y_test  = y[:spl]
+
+	spl2 = int(val_split*len(X))
+	x_val = x[:spl2]
+	y_val = y[:spl2]
+	x_train = X[spl2:]
+	y_train = Y[spl2:]
 
 	if norm:
-		x_train, x_test = x_train / 255.0, x_test / 255.0
-	return x_train, y_train, x_test, y_test
+		x_train, x_val, x_test = x_train / 255.0, x_val / 255.0, x_test / 255.0
+
+
+
+	print(f"This Dog_Cat dataset contains the following: \nTotal length Dataset = {len(x)} \nTotal length train set = {len(x_train)} \nTotal length val set = {len(x_val)} \nTotal length test set= {len(x_test)}")
+	return x_train, y_train, x_val, y_val, x_test, y_test
 
 def import_mnist(split, norm, limit = None):
 	'''
@@ -166,7 +187,7 @@ def import_mnist(split, norm, limit = None):
 	if not limit:
 		limit = len(y_train)
 
-	return x_train[:limit], y_train[:limit], x_test, y_test
+	return x_train, y_train, x_val, y_val, x_test, y_test
 
 
 def train_val_test():
@@ -215,8 +236,27 @@ def make_pre_train_classes(Y, numb_classes = None):
 	clas_np = np.array(clas).reshape(-1,numb_classes)
 	return clas_np, numb_classes
 
-def main():
-	# small example to test script
-	pass
-if __name__ == '__main__':
-	main() 
+def get_data(name_data,name_data2, vgg,img_size_x,img_size_y, norm, train_size, color = False):
+	if name_data == 'mela':
+		x_train, y_train, x_val, y_val, x_test, y_test = import_melanoom(img_size_x,img_size_y, norm, train_size, color)
+		model = None
+	elif name_data == 'catdog':
+		x_train, y_train, x_val, y_val, x_test, y_test = import_dogcat(img_size_x,img_size_y, norm, train_size, color)
+		model = None
+	elif vgg:
+		x_train, y_train, x_val, y_val, x_test, y_test = None,None,None,None,None,None
+		model = tf.keras.applications.VGG16(weights=None,input_shape = (x[0].shape), include_top=True, classes=numb_classes) #top??
+		adm = tf.keras.optimizers.SGD(lr=0.008, momentum=0.0, decay=0.0, nesterov=False)
+		model.compile(loss='categorical_crossentropy', optimizer=adm)#, metrics=['accuracy'])  #'auc'
+	else:
+		print('There is no data set with that name')		
+
+	if name_data2 == 'mela':
+		x_train2, y_train2, x_val2, y_val2, x_test2, y_test2 = import_melanoom(img_size_x,img_size_y, norm, train_size, color)
+	elif name_data2 == 'catdog':
+		x_train2, y_train2, x_val2, y_val2, x_test2, y_test2 = import_dogcat(img_size_x,img_size_y, norm, train_size, color)
+	else:
+		print('Warning: No second set')
+		x_train2, y_train2, x_val2, y_val2, x_test2, y_test2 = None,None,None,None,None,None
+	print('Train, Val and test sets created')
+	return x_train, y_train, x_val, y_val, x_test, y_test, x_train2, y_train2, x_val2, y_val2, x_test2, y_test2, model
