@@ -7,7 +7,7 @@ import tensorflow as tf
 import sklearn
 from sklearn import datasets, svm, metrics
 # import keras.backend as K
-
+from sklearn.metrics import roc_auc_score
 from sklearn import metrics
 
 
@@ -24,18 +24,21 @@ from sklearn import metrics
 #     s = ptas*binSizes
 #     return K.sum(s, axis=0)
 
-def make_model(x, y, numb_classes):
+def make_model(x, y, numb_classes, w = None):
 	
 	# make and compile vgg16 model with correct parameters
-	vgg_conv = tf.keras.applications.VGG16(weights=None,input_shape = (x[0].shape), include_top=True, classes=numb_classes) #top??
+	vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=numb_classes) #top??
 	adm = tf.keras.optimizers.SGD(lr=0.008, momentum=0.0, decay=0.0, nesterov=False)
 	vgg_conv.compile(loss='categorical_crossentropy', optimizer=adm, metrics=['accuracy'])  #'auc'
 
 	return vgg_conv
 
-def train_model(model,X,Y,):
+def train_model(model,x_train,y_train,x_test,y_test, Epochs, Batch_size):
 	# train models over AUC, for x epochs. make it loopable for further test. return plottable data
-	H = model.fit(X,Y, batch_size=batch_size_manual, epochs=E, validation_split=0.1)
+	H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_test, y_test))
+	score = roc_auc_score(y_test, model.predict(x_test))
+	print(' AUC of model = ' ,score)
+	return H, score
 
 #option 1
 def dataGenerator(pathes, batch_size):
