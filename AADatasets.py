@@ -11,6 +11,9 @@ import random
 import pandas
 
 def import_melanoom(img_size_x,img_size_y, norm, color = False):
+	'''
+	doc string
+	'''
 	try: 
 		DIR = r"C:\Users\Floris\Documents\Python Scripts\ISIC-2017_Training_Data"
 		df = pandas.read_csv(r"C:\Users\Floris\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")

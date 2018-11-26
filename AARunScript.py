@@ -141,3 +141,6 @@ if __name__ == '__main__':
 	plt.plot(r, [500,2500,5000,10000,15000,20000])
 	plt.title('Dataset len and auc of svm')
 	plt.show()
+
+
+	### LAPNOTES AUTOMATE --> write txt file. 
