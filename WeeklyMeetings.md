@@ -131,6 +131,7 @@ I did not really achieve to mimic the results, is this now a new top priority or
 * make changes to readme
 * make architecture file (not on github)
 * auto labnotes
+* cool loading function
 
 #### What did you struggle with?
 
