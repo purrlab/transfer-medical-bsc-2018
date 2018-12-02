@@ -39,7 +39,7 @@ Copy/paste and fill in the template below each week, BEFORE coming to the weekly
 
 
 Week 1
-Date: 12-11-2018
+Date: 19-11-2018
 
 * What did you achieve?
   Achieved knowledge over the trabsfer learing community. What is goining on and what has been done.
@@ -90,7 +90,7 @@ Any other topics:
   The labbook feels pretty obsolete the versions are very rough. is that bad?\
   
   ## Week 3
-### Date: 24-09-2018
+### Date: 26-11-2018
 
 #### What did you achieve?
 
@@ -119,4 +119,36 @@ Any other topics:
 #### Any other topics
 
 I did not really achieve to mimic the results, is this now a new top priority or isnt it? 
+
+ ## Week 3
+### Date: 12-03-2018
+
+#### What did you achieve?
+
+* Finetune vgg16 on imagenet
+* replicate results of crowdsource.
+* make a generator
+* make changes to readme
+* make architecture file (not on github)
+* auto labnotes
+
+#### What did you struggle with?
+
+* laptop crashed, always fun.
+* generator is slow, but probably neccesary with bigger data sets
+* still a bit hard coding in jupyter instead of clean script
+
+#### What would you like to work on next week?
+
+* Get data generator to work on file path command, and apply it to big data set.
+* better val and test splitting.
+* some analytic tools built in
+
+#### Where do you need help from Veronika?
+
+* ....
+
+#### Any other topics
+
+Had a busy week, UEFA took full 3 days... Work 1 full day, so just 3 left for uni. 
 
