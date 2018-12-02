@@ -295,7 +295,7 @@ def count_classes():
 
 def loading(size,i,start, name):
 	stop = time.time()
-	part = int((i+1/size)*20)
+	part = int(((i+1)/size)*20)
 	loading_bar = part*'-'+(20-part)*' '
 	print(f"{name}: {i+1}/{size}: [{loading_bar[0:10]}{part*5}%{loading_bar[10:20]}] elapsed time: {int(stop-start)}",end='\r')
 
