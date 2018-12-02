@@ -5,35 +5,61 @@
 # save result fig with date.
 # save results and params in txt in a file.
 # versie van fucntie vermelden.
-
+import matplotlib.pyplot as plt
+import numpy as np
 import time
 
-fig.savefig('path/to/save/image/to.png')   # save the figure to file
-plt.close(fig)    # close the figure
+# fig.savefig('path/to/save/image/to.png')   # save the figure to file
+# plt.close(fig)    # close the figure
 
-par = {"epochs":5, "size":10000, "model":"VGG"}
-res = {"AUC":[0.1,0.2,0.3,0.4,0.5], "acc":0.99, "loss":0.66}
-fig_str = "20181128_002143_plotResult \nNext"
+# par = {"epochs":5, "size":10000, "model":"VGG"}
+# res = {"AUC":[0.1,0.2,0.3,0.4,0.5], "acc":0.99, "loss":0.66}
+# fig_str = "Results_1.fig"
 
-t = time.localtime()
-file_name= f"{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_RESULTS00{t.tm_hour}{t.tm_min}.txt"
+def doc(par,res,H):
+	t = time.localtime()
+	file_name= f"{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_RESULTS00{t.tm_hour}{t.tm_min}.txt"
 
-f= open(r"C:\Users\s147057\Documents\GitHub\transfer-medical-bsc-2018\LAB\{}".format(file_name),"w+")
+	f= open(r"C:\Users\Floris\Documents\GitHub\transfer-medical-bsc-2018\LAB\{}".format(file_name),"w+")
 
-params = str()
-x = 1
-for item in par.keys():
-	params = params + f"\n{x}." + str(item) + " = " + str(par[item])
-	x+=1
+	params = str()
+	x = 1
+	for item in par.keys():
+		params = params + f"\n{x}." + str(item) + " = " + str(par[item])
+		x+=1
 
-results = str()
-x = 1
-for item in res.keys():
-	results = results + f"\n{x}." + str(item) + " = " + str(res[item])
-	x+=1
+	results = str()
+	x = 1
+	for item in res.keys():
+		results = results + f"\n{x}." + str(item) + " = " + str(res[item])
+		x+=1
 
-all_times = "Floris Fok \n" + str(t.tm_year)+"/" + str(t.tm_mon) +"/"+ str(t.tm_mday) +"      At: "+ str(t.tm_hour) +":" + str(t.tm_min)  +":"+ str(t.tm_sec)
+	all_times = "Floris Fok \n" + str(t.tm_year)+"/" + str(t.tm_mon) +"/"+ str(t.tm_mday) +"      At: "+ str(t.tm_hour) +":" + str(t.tm_min)  +":"+ str(t.tm_sec)
 
-f.write(f"{all_times}\n \n \n The params where: {params} \n \n \n The results where: {results}")
 
-f.write(f"Figure names: {fig_str}")
+	path = r"C:\Users\Floris\Documents\GitHub\T_"
+
+	f.write(f"{all_times}\n \n \n The params where: {params} \n \n \n The results where: {results}")
+	plt.plot(H.history['acc'])
+	plt.plot(H.history['val_acc'])
+	plt.title('model accuracy')
+	plt.ylabel('accuracy')
+	plt.xlabel('epoch')
+	plt.legend(['train', 'test'], loc='upper left')
+	plt.show()
+	fig_str = f"{path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureACC0{t.tm_hour}{t.tm_min}.png"
+	fig = plt.figure(figsize=(3, 6))
+	fig.savefig(fig_str, dpi=fig.dpi)
+
+	# summarize history for loss
+	plt.plot(H.history['loss'])
+	plt.plot(H.history['val_loss'])
+	plt.title('model loss')
+	plt.ylabel('loss')
+	plt.xlabel('epoch')
+	plt.legend(['train', 'test'], loc='upper left')
+	plt.show()
+	fig_str2 = f"{path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureLOSS0{t.tm_hour}{t.tm_min}.png"
+	fig = plt.figure(figsize=(3, 6))
+	fig.savefig(fig_str2, dpi=fig.dpi)
+	f.write(f"Figure names: {fig_str} + {fig_str2}")

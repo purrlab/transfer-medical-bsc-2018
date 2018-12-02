@@ -9,6 +9,7 @@ from sklearn import datasets, svm, metrics
 import os
 import random
 import pandas
+import time
 
 def import_melanoom(img_size_x,img_size_y, norm, color = False):
 	'''
@@ -16,15 +17,15 @@ def import_melanoom(img_size_x,img_size_y, norm, color = False):
 	'''
 	try: 
 		DIR = r"C:\Users\Floris\Documents\Python Scripts\ISIC-2017_Training_Data"
-		df = pandas.read_csv(r"C:\Users\Floris\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")
-		df = df.set_index("image_id")
+		data_frame = pandas.read_csv(r"C:\Users\Floris\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")
+		data_frame = data_frame.set_index("image_id")
 		os.listdir(DIR)
 		data_dir = DIR
 		print('Desktop detected')
 	except:
 		DIR = r"C:\Users\s147057\Documents\Python Scripts\ISIC-2017_Training_Data"
-		df = pandas.read_csv(r"C:\Users\S147057\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")
-		df = df.set_index("image_id")
+		data_frame = pandas.read_csv(r"C:\Users\S147057\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")
+		data_frame = data_frame.set_index("image_id")
 		print('Laptop detected')
 		data_dir = DIR
 
@@ -34,18 +35,22 @@ def import_melanoom(img_size_x,img_size_y, norm, color = False):
 
 	L = os.listdir(data_dir)
 	L.reverse() # omdraaien van de lijst zorgt voor meer diversiteit van classes. 
+	size = 1372+374
+	start = time.time()
+	i = 0
 	for img in L[:-1]:
 		if 'superpixels' in img:
 			continue
 		try:
 			
-			class_num = df.loc[img[0:-4],:]
+			class_num =	data_frame.loc[img[0:-4],:]
 			if class_num[0] == 1:
-				class_num = [0,1,0]
+				class_num = [0,1]
 			elif class_num[1] == 1:
-				class_num = [0,0,1]
+				continue
+				class_num = [0,1]
 			else:
-				class_num = [1,0,0]
+				class_num = [1,0]
 
 			if color:
 				D = 3
@@ -60,33 +65,36 @@ def import_melanoom(img_size_x,img_size_y, norm, color = False):
 			target_data.append(class_num)
 		except Exception as e:
 			pass
+		loading(size,i,start, "melanoom data import")
+		i+=1
 
+	print('\n')
 	x = np.array(training_data).reshape(-1,img_size_x, img_size_y,D)
-	y = np.array(target_data).reshape(-1,3)
+	y = np.array(target_data).reshape(-1,2)
 
-	if type(norm) != bool:
-		print("please enter 'boolean' for norm(alization)")
+	# if type(norm) != bool:
+	# 	print("please enter 'boolean' for norm(alization)")
 
-	test_split = 0.25
-	val_split = 0.1
+	# test_split = 0.25
+	# val_split = 0.1
 
-	spl = int(test_split*len(x))
-	X = x[spl:]
-	Y = y[spl:]
-	x_test  = x[:spl]
-	y_test  = y[:spl]
+	# spl = int(test_split*len(x))
+	# X = x[spl:]
+	# Y = y[spl:]
+	# x_test  = x[:spl]
+	# y_test  = y[:spl]
 
-	spl2 = int(val_split*len(X))
-	x_val = x[:spl2]
-	y_val = y[:spl2]
-	x_train = X[spl2:]
-	y_train = Y[spl2:]
+	# spl2 = int(val_split*len(X))
+	# x_val = x[:spl2]
+	# y_val = y[:spl2]
+	# x_train = X[spl2:]
+	# y_train = Y[spl2:]
 
-	if norm:
-		x_train, x_val, x_test = x_train / 255.0, x_val / 255.0, x_test / 255.0
+	# if norm:
+	# 	x_train, x_val, x_test = x_train / 255.0, x_val / 255.0, x_test / 255.0
 
-	print(f"This melanoom dataset contains the following: \nTotal length Dataset = {len(x)} \nTotal length train set = {len(x_train)} \nTotal length val set = {len(x_val)} \nTotal length test set= {len(x_test)}")
-	return x_train, y_train, x_val, y_val, x_test, y_test
+	print(f"This melanoom dataset contains the following: \nTotal length Dataset = {len(x)}")# \nTotal length train set = {len(x_train)} \nTotal length val set = {len(x_val)} \nTotal length test set= {len(x_test)}")
+	return x,y #x_train, y_train, x_val, y_val, x_test, y_test
 
 def import_dogcat(img_size_x,img_size_y, norm, color):
 	try: 
@@ -263,3 +271,43 @@ def get_data(name_data,name_data2, img_size_x,img_size_y, norm, color = False):
 		x_train2, y_train2, x_val2, y_val2, x_test2, y_test2 = None,None,None,None,None,None
 	print('Train, Val and test sets created')
 	return x_train, y_train, x_val, y_val, x_test, y_test, x_train2, y_train2, x_val2, y_val2, x_test2, y_test2
+
+
+def count_classes():
+	'''
+	Counts classes, no matter wich type of class notation it is, array of 1 and 0 or interger.
+	input: class list
+	output: class dict, {class:count}
+	'''
+	## checks if they are intergers ##
+	if type(Y[0]) == np.ndarray:
+		back_to_num = list()
+		for i in Y:
+			back_to_num.append(list(i).index(1))
+
+	d = dict()
+	for n in back_to_num:
+		if n in d:
+			d[n] += 1
+		else:
+			d[n] = 1
+	return d
+
+def loading(size,i,start, name):
+	stop = time.time()
+	part = int((i+1/size)*20)
+	loading_bar = part*'-'+(20-part)*' '
+	print(f"{name}: {i+1}/{size}: [{loading_bar[0:10]}{part*5}%{loading_bar[10:20]}] elapsed time: {int(stop-start)}",end='\r')
+
+def more_data(x,y,r):
+	x_new = x
+	y_new = y
+	start = time.time()
+	for i in range(0,r):
+		loading(r,i,start, "Data generator")
+		datagen =  tf.keras.preprocessing.image.ImageDataGenerator(rotation_range=360, fill_mode = "nearest")
+		img=datagen.random_transform(x[i])
+		y_new = np.concatenate((y_new, np.array(y[i]).reshape(1,y.shape[1])))
+		x_new = np.concatenate((x_new, np.array(img).reshape(1,img.shape[0], img.shape[1],img.shape[2])))
+	print("\n")
+	return x_new,y_new

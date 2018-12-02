@@ -33,24 +33,33 @@ def make_model(x, numb_classes, w = None):
 	# make and compile vgg16 model with correct parameters
 	vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=classes) #top??
 	if w != None:
-		model = tf.keras.models.Sequential()
-		model.add(tf.keras.layers.Dense(numb_classes, input_shape = (1000,1)))
-		model.add(tf.keras.layers.Activation('sigmoid'))
-		vgg_conv = tf.keras.models.Model(inputs=[vgg_conv.input],outputs=[model.output])
-	adm = tf.keras.optimizers.SGD(lr=0.008, momentum=0.0, decay=0.0, nesterov=False)
-	vgg_conv.compile(loss='categorical_crossentropy', optimizer=adm, metrics=['accuracy'])  #'auc'
+		for layer in vgg_conv.layers[:-5]:
+			layer.trainable = False
+		fine_tune = tf.keras.layers.Dense(500, activation='relu')(vgg_conv.output)
+		fine_tune = tf.keras.layers.Dense(350, activation='relu')(fine_tune)
+		fine_tune = tf.keras.layers.Dense(numb_classes, activation='sigmoid')(fine_tune)
+		vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
 
+	for layer in vgg_conv.layers:
+		print(layer, layer.trainable)
+	#opt = tf.keras.optimizers.SGD(lr=0.008, momentum=0.0, decay=0.0, nesterov=False)
+	print("using mse")
+	opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.90)
+	vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'
 	return vgg_conv
 
 def train_model(model,x_train,y_train,x_test,y_test, Epochs, Batch_size):
 	# train models over AUC, for x epochs. make it loopable for further test. return plottable data
-	H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_test, y_test))
+
+	stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10)
+
+	H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_test, y_test),shuffle=True,class_weight={0:1.,1:4.}, callbacks = [stop])
 	score = roc_auc_score(y_test, model.predict(x_test))
 	print(' AUC of model = ' ,score)
-	return H, score
+	return H, score, model
 
 #option 1
-def dataGenerator(pathes, batch_size):
+def data_generator_large_files(pathes, batch_size):
 
     while True: #generators for keras must be infinite
         for path in pathes:
