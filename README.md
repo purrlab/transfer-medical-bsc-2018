@@ -1,20 +1,51 @@
+__Transfer learning__
+Dankzij transfer learning kan je met een kleine data set toch goede resultaten krijgen uit je deep learing model, voorheen was dit niet mogelijk en dacht men dat je grote data sets nodig hebt voor goede resultaten.
+
+Transferlearning kan op twee manieren:
+* Fine tuning: Je traint over het model, of een deel van het model heen. Soms vereist dit dat je er 2 of 3 lagen aan toe moet voegen om hem op je classes te kunnen aanpassen.
+* Featurising: Je gebruikt de uitkomst of een gekozen laag, meestal platte laag, als een vector voor je SVM. Zo combineer je als waren twee learning algoritmes.
+
+transfer learning wordt al veel toegepast in de medische beeldverwerking, vaak wordt hier imagenet als pre train model gebruikt of een andere medische data set. Het model dat het vaakst voorkomen zijn VGG16 of Caffeenet, de tweede komt vooral voor in papers omdat deze heel simpel is en minder zware hardware nodig heeft. 
+
+Vaak wordt echter heel nauw naar 1 techniek of data set gekeken, er mist als het ware nog een systematische aanpak. Met namen tussen de verschillen can medische en niet medische data sets
+
 __Wat ga ik onderzoeken__
-Een systimatische aanpak met betrekking tot transfer learning. dit houdt in dat ik het zelfde model en techniek gebruik om verschillende data sets te testen. Later zullen modelen veranderen tegenover zelfde data en zelfde techniek. Uit eindelijk kan er gekeken worden naar verschillende technieken. 
+Een systimatische aanpak met betrekking tot transfer learning. dit houdt in dat ik het zelfde model en techniek gebruik om verschillende data sets te testen. Met name het verschil tussen medische en niet medische data sets
+
+Later zullen modelen veranderen tegenover zelfde data en zelfde techniek. Uit eindelijk kan er gekeken worden naar verschillende technieken. 
 
 __Hoofdvraag__
 Wat is de invloed van de pre trrain data set op de test data set.
 
+Sub: Is er en samen hang tussen resultaat/nauwkeurigheid en pre tain/test data medisch en niet medisch.
 Sub: Is er en samen hang tussen resultaat/nauwkeurigheid en pre tain/test data grootte.
 Sub: Is er en samen hang tussen resultaat/nauwkeurigheid en pre tain/test data classificatie aantal.
 Sub: Is er en samen hang tussen resultaat/nauwkeurigheid en pre tain val_loss.
 
-__Idealiter: "Eigelijk een paar parameters vinden die er voor zorgen dat jij kan zeggen dat je transferlearing model een goede match is."__
+__Idealiter: "Wat zijn eigenschappen van een goede pre train data set voor de transferlearning dataset."__
 
 __BEP__
-Met Verschillende datasets en varianten daarvan, transfer learning toepassen op VGG16 met feature extraction. Deze resultaten dan vergelijken tegenover gekozen parameters zoals lengte data set etc. 
-Eerst zullen er 2 korte experimenten plaats vinden. Dan zullen de functies gekozen worden en gespecialiseerd worden, tevens een run script.
+1. Bewijs dat het script een transferlearning taak kan verrichten. (week 1-2)
+2. Reproduceer een vorig transferlearning project. (week 3)
+3. Voor testen uit met verschillende parameters en plot deze (week 4-5)
+4. Vergelijk data sets met elkaar en plot resultaat (week 6-7)
+5. Breid uit. (week 8-10)
+6. Verslag (week 6-10 )
 
-__Progameer doelen__
+__Het Sciript__
+
+* AADataset: loads en generates data
+* AAPretrain: Makes and trains models
+* AATransferLearn: Preforms predictions and SVM
+* AALogic: Has some experiments in it, calls fucntions in specific order
+* AAAnalyseData: Will plot and Calculate AUC after models and svm has ran.
+* LabnoteDoc: Creates files with used params and gotten results. Figure names are also saved.
+* File: LAB: Contains the files created by LabnoteDoc
+* Other files are "unsorted junk"
+
+
+
+
 Hierin zal omschreven staan wat er  zal worden geprogrammeerd in python. Met de versies komt er meer diepgang in.
 Doel
 Het doel van het script klinkt als volgt:
