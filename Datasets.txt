@@ -32,3 +32,6 @@ COREL-1000  scene recognition         1K    10        Ribeiro et al. (2017)
 Kaggle-DR   image classification      35K   2         Menegola et al. (2017)
 INbreast    breasr lesesion classi    410   2         Shi et al. (2018)
 ICPR 2012   hr2-cell classification   1.5K  6         Lei et al. (2018)
+
+https://github.com/sfikas/medical-imaging-datasets
+some more... 
