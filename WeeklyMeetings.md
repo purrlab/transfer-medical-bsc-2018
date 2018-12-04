@@ -120,7 +120,7 @@ Any other topics:
 
 I did not really achieve to mimic the results, is this now a new top priority or isnt it? 
 
- ## Week 3
+ ## Week 4
 ### Date: 12-03-2018
 
 #### What did you achieve?
