@@ -41,9 +41,8 @@ def make_model(x, y, w = None):
         
     for layer in vgg_conv.layers:
         print(layer, layer.trainable)
-    #opt = tf.keras.optimizers.SGD(lr=0.008, momentum=0.0, decay=0.0, nesterov=False)
-    print("using mse")
-    opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.90)
+    opt = tf.keras.optimizers.SGD(lr=0.008, momentum=0.01, decay=0.0, nesterov=True)
+    #opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.90)
     vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'
     return vgg_conv
 
@@ -52,7 +51,7 @@ def train_model(model,x_train,y_train,x_test,y_test, Epochs, Batch_size):
 
     stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10)
 
-    H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_test, y_test),shuffle=True, callbacks = [stop])
+    H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_test, y_test),shuffle=True, callbacks = [])
     score = roc_auc_score(y_test, model.predict(x_test))
     print(' AUC of model = ' ,score)
     return H, score, model

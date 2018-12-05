@@ -39,7 +39,7 @@ def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "
         try:
             
             class_num = data_frame.loc[img[0:-4],:]
-            if classes == "Two":
+            if classes == "two":
                 if class_num[0] == 1:
                     class_num = [0,1]
                 elif class_num[1] == 1:
@@ -47,22 +47,23 @@ def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "
                     class_num = [0,1]
                 else:
                     class_num = [1,0]
+                c = 2
             elif classes == "three":
                 if class_num[0] == 1:
-                    class_num = [0,1]
+                    class_num = [0,1,0]
                 elif class_num[1] == 1:
-                    continue
-                    class_num = [0,1]
+                    class_num = [0,0,1]
                 else:
-                    class_num = [1,0]
-            else:
+                    class_num = [1,0,0]
+                c = 3
+            elif classes == "two_combined":
                 if class_num[0] == 1:
                     class_num = [0,1]
                 elif class_num[1] == 1:
-                    continue
                     class_num = [0,1]
                 else:
                     class_num = [1,0]
+                c = 2
 
             if color:
                 D = 3
@@ -82,7 +83,7 @@ def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "
 
     print('\n')
     x = np.array(training_data).reshape(-1,img_size_x, img_size_y,D)
-    y = np.array(target_data).reshape(-1,2)
+    y = np.array(target_data).reshape(-1,c)
 
     if type(norm) != bool:
         print("please enter 'boolean' for norm(alization)")

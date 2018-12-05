@@ -50,7 +50,7 @@ from LabnotesDoc import doc
 # model.save_weights(r"C:\Users\Floris\Documents\GitHubreg_first.h5")
 # print("Saved model to disk")
 
-params = {'img_size_x':224,'img_size_y':224,'norm':False,'color':True, 'pretrain':None, "equal_data":True, "shuffle": True, "epochs": 50 , "val_size":400, "Batch_size": 32}
+params = {'img_size_x':224,'img_size_y':224,'norm':False,'color':True, 'pretrain':None, "equal_data":True, "shuffle": True, "epochs": 50 , "val_size":300, "Batch_size": 16}
 file_path = r"D:\ISIC\ISIC-2017_Training_Data"
 config_desktop()
 
@@ -81,17 +81,18 @@ except:
 model = make_model(x, y, w = params['pretrain'])
 H, score, model = train_model(model,x[params["val_size"]:],y[params["val_size"]:],x[:params["val_size"]],y[:params["val_size"]], params["epochs"], params["Batch_size"])
 
-result = {'score':score,"acc_epoch":H.history['acc'],"val_acc_epoch":H.history['val_acc'],"loss_epoch":H.history['loss'],"vall_loss_epoch":H.history['val_loss']}
+results = {'score':score,"acc_epoch":H.history['acc'],"val_acc_epoch":H.history['val_acc'],"loss_epoch":H.history['loss'],"vall_loss_epoch":H.history['val_loss']}
 
 doc(params,results,H)
 
 #save model to JSON
 model_json = model.to_json()
-with open(r"C:\Users\Floris\Documents\GitHub\reg_first.json", "w") as json_file:
+with open(r"D:\models\Epochs_50_melanoom_equal.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save_weights(r"C:\Users\Floris\Documents\GitHubreg_first.h5")
+model.save_weights(r"D:\models\weights\Epochs_50_melanoom_equal.h5")
 print("Saved model to disk")
 
 
 ## analitics ##
+
