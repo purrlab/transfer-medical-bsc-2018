@@ -24,39 +24,38 @@ from sklearn import metrics
 #     s = ptas*binSizes
 #     return K.sum(s, axis=0)
 
-def make_model(x, numb_classes, w = None):
-	if w != None:
-		classes = 1000
-	else:
-		classes = numb_classes
+def make_model(x, y, w = None):
 
-	# make and compile vgg16 model with correct parameters
-	vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=classes) #top??
-	if w != None:
-		for layer in vgg_conv.layers[:-5]:
-			layer.trainable = False
-		fine_tune = tf.keras.layers.Dense(500, activation='relu')(vgg_conv.output)
-		fine_tune = tf.keras.layers.Dense(350, activation='relu')(fine_tune)
-		fine_tune = tf.keras.layers.Dense(numb_classes, activation='sigmoid')(fine_tune)
-		vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
-
-	for layer in vgg_conv.layers:
-		print(layer, layer.trainable)
-	#opt = tf.keras.optimizers.SGD(lr=0.008, momentum=0.0, decay=0.0, nesterov=False)
-	print("using mse")
-	opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.90)
-	vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'
-	return vgg_conv
+    if w != None:
+        classes = 1000
+        vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=classes)
+        for layer in vgg_conv.layers[:-5]:
+            layer.trainable = False
+        fine_tune = tf.keras.layers.Dense(500, activation='relu')(vgg_conv.output)
+        fine_tune = tf.keras.layers.Dense(350, activation='relu')(fine_tune)
+        fine_tune = tf.keras.layers.Dense(numb_classes, activation='sigmoid')(fine_tune)
+        vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
+    else:
+        c = int(y.shape[1])
+        vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=c)
+        
+    for layer in vgg_conv.layers:
+        print(layer, layer.trainable)
+    #opt = tf.keras.optimizers.SGD(lr=0.008, momentum=0.0, decay=0.0, nesterov=False)
+    print("using mse")
+    opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.90)
+    vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'
+    return vgg_conv
 
 def train_model(model,x_train,y_train,x_test,y_test, Epochs, Batch_size):
-	# train models over AUC, for x epochs. make it loopable for further test. return plottable data
+    # train models over AUC, for x epochs. make it loopable for further test. return plottable data
 
-	stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10)
+    stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10)
 
-	H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_test, y_test),shuffle=True,class_weight={0:1.,1:4.}, callbacks = [stop])
-	score = roc_auc_score(y_test, model.predict(x_test))
-	print(' AUC of model = ' ,score)
-	return H, score, model
+    H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_test, y_test),shuffle=True, callbacks = [stop])
+    score = roc_auc_score(y_test, model.predict(x_test))
+    print(' AUC of model = ' ,score)
+    return H, score, model
 
 #option 1
 def data_generator_large_files(pathes, batch_size):
@@ -89,15 +88,15 @@ def data_generator_large_files(pathes, batch_size):
 #         model.fit(x_train, y_train, batch_size=50, epochs=epoch+1, initial_epoch=epoch, shuffle=True)
 
 def config_desktop():
-	## WHEN USING TF 1.5 or lower and GPU ###
-	config = tf.ConfigProto()               #
-	config.gpu_options.allow_growth = True  #
-	session = tf.Session(config=config)     #
-	#########################################
+    ## WHEN USING TF 1.5 or lower and GPU ###
+    config = tf.ConfigProto()               #
+    config.gpu_options.allow_growth = True  #
+    session = tf.Session(config=config)     #
+    #########################################
 
 def main():
-	# small example to test script
-	pass
+    # small example to test script
+    pass
 
 if __name__ == '__main__':
-	main()
+    main()

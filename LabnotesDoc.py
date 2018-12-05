@@ -17,49 +17,49 @@ import time
 # fig_str = "Results_1.fig"
 
 def doc(par,res,H):
-	t = time.localtime()
-	file_name= f"{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_RESULTS00{t.tm_hour}{t.tm_min}.txt"
+    t = time.localtime()
+    file_name= f"{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_RESULTS00{t.tm_hour}{t.tm_min}.txt"
 
-	f= open(r"C:\Users\Floris\Documents\GitHub\transfer-medical-bsc-2018\LAB\{}".format(file_name),"w+")
+    f= open(r"C:\Users\Floris\Documents\GitHub\transfer-medical-bsc-2018\LAB\{}".format(file_name),"w+")
 
-	params = str()
-	x = 1
-	for item in par.keys():
-		params = params + f"\n{x}." + str(item) + " = " + str(par[item])
-		x+=1
+    params = str()
+    x = 1
+    for item in par.keys():
+        params = params + f"\n{x}." + str(item) + " = " + str(par[item])
+        x+=1
 
-	results = str()
-	x = 1
-	for item in res.keys():
-		results = results + f"\n{x}." + str(item) + " = " + str(res[item])
-		x+=1
+    results = str()
+    x = 1
+    for item in res.keys():
+        results = results + f"\n{x}." + str(item) + " = " + str(res[item])
+        x+=1
 
-	all_times = "Floris Fok \n" + str(t.tm_year)+"/" + str(t.tm_mon) +"/"+ str(t.tm_mday) +"      At: "+ str(t.tm_hour) +":" + str(t.tm_min)  +":"+ str(t.tm_sec)
+    all_times = "Floris Fok \n" + str(t.tm_year)+"/" + str(t.tm_mon) +"/"+ str(t.tm_mday) +"      At: "+ str(t.tm_hour) +":" + str(t.tm_min)  +":"+ str(t.tm_sec)
 
 
-	path = r"C:\Users\Floris\Documents\GitHub\T_"
+    path = r"C:\Users\Floris\Documents\GitHub\T_"
 
-	f.write(f"{all_times}\n \n \n The params where: {params} \n \n \n The results where: {results}")
-	plt.plot(H.history['acc'])
-	plt.plot(H.history['val_acc'])
-	plt.title('model accuracy')
-	plt.ylabel('accuracy')
-	plt.xlabel('epoch')
-	plt.legend(['train', 'test'], loc='upper left')
-	plt.show()
-	fig_str = f"{path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureACC0{t.tm_hour}{t.tm_min}.png"
-	fig = plt.figure(figsize=(3, 6))
-	fig.savefig(fig_str, dpi=fig.dpi)
+    f.write(f"{all_times}\n \n \n The params where: {params} \n \n \n The results where: {results}")
+    plt.plot(H.history['acc'])
+    plt.plot(H.history['val_acc'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()
+    fig_str = f"{path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureACC0{t.tm_hour}{t.tm_min}.png"
+    fig = plt.figure(figsize=(3, 6))
+    fig.savefig(fig_str, dpi=fig.dpi)
 
-	# summarize history for loss
-	plt.plot(H.history['loss'])
-	plt.plot(H.history['val_loss'])
-	plt.title('model loss')
-	plt.ylabel('loss')
-	plt.xlabel('epoch')
-	plt.legend(['train', 'test'], loc='upper left')
-	plt.show()
-	fig_str2 = f"{path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureLOSS0{t.tm_hour}{t.tm_min}.png"
-	fig = plt.figure(figsize=(3, 6))
-	fig.savefig(fig_str2, dpi=fig.dpi)
-	f.write(f"Figure names: {fig_str} + {fig_str2}")
+    # summarize history for loss
+    plt.plot(H.history['loss'])
+    plt.plot(H.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()
+    fig_str2 = f"{path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureLOSS0{t.tm_hour}{t.tm_min}.png"
+    fig = plt.figure(figsize=(3, 6))
+    fig.savefig(fig_str2, dpi=fig.dpi)
+    f.write(f"Figure names: {fig_str} + {fig_str2}")
