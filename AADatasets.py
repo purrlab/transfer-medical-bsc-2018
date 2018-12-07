@@ -40,6 +40,7 @@ def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "
             
             class_num = data_frame.loc[img[0:-4],:]
             if classes == "two":
+                size = 1372+374
                 if class_num[0] == 1:
                     class_num = [0,1]
                 elif class_num[1] == 1:
@@ -49,6 +50,7 @@ def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "
                     class_num = [1,0]
                 c = 2
             elif classes == "three":
+                size = 2000
                 if class_num[0] == 1:
                     class_num = [0,1,0]
                 elif class_num[1] == 1:
@@ -57,6 +59,7 @@ def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "
                     class_num = [1,0,0]
                 c = 3
             elif classes == "two_combined":
+                size = 2000
                 if class_num[0] == 1:
                     class_num = [0,1]
                 elif class_num[1] == 1:
@@ -163,32 +166,40 @@ def import_dogcat(path, img_size_x,img_size_y, norm, color):
 
     training_data = list()
     training_class = list()
-
+    
     for category in cat:
-        path = os.path.join(path, category)
         class_num = cat.index(category)
-        path = os.path.join(path, category)
-        for img in os.listdir(path):
+        path2 = os.path.join(path, category)
+        start = time.time()
+        i = 0
+        size = len(list(os.listdir(path2)))
+        for img in os.listdir(path2):
             try:
                 if color:
                     D = 3
-                    img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_COLOR)
+                    img_array = cv2.imread(os.path.join(path2,img), cv2.IMREAD_COLOR)
                     new_array = cv2.resize(img_array,(img_size_x, img_size_y))
                     
                 else:
                     D = 1
-                    img_array = cv2.imread(os.path.join(path,img), cv2.IMREAD_GRAYSCALE)
-                    
+                    img_array = cv2.imread(os.path.join(path2,img), cv2.IMREAD_GRAYSCALE)
                     new_array = cv2.resize(img_array,(img_size_x, img_size_y))
                 training_data.append(new_array)
-                training_class.append(class_num)
+                if class_num == 0:
+                    training_class.append([1,0])
+                elif class_num == 1:
+                    training_class.append([0,1])
             except Exception as e:
                 pass
+            loading(size,i,start, "Cat_Dog data import")
+            i+=1
+        print("\n")
+
     zip_list = list(zip(training_data,training_class))
     random.shuffle(zip_list)
     training_data,training_class = zip(*zip_list)
     x = np.array(training_data).reshape(-1,img_size_x, img_size_y,D)
-    y = np.array(training_class).reshape(-1,1)
+    y = np.array(training_class).reshape(-1,len(cat))
 
     if type(norm) != bool:
         print("please enter 'boolean' for norm(alization)")
@@ -355,7 +366,13 @@ def equal_data(x,y):
     for key in d.keys():
         l.append(d[key])
     limit = max(l)
-    
+
+    zip_melanoom = zip(x,y)
+    zippy = list(zip_melanoom)
+    random.shuffle(zippy)
+    x,y = zip(*zippy)
+    x = np.array(x)
+    y = np.array(y)
     
     bad = list()
     
@@ -390,3 +407,18 @@ def equal_data_run(y_new,x_new):
         if d_old == d_new:
             break
     return x_new,y_new
+
+def val_split(x,y, val_size):
+    val_set = []
+    zip_list = list(zip(x,y))
+    for i in range(0,val_size):
+        random.shuffle(zip_list)
+        new_val = zip_list.pop()
+        val_set.append(new_val)
+    x,y = zip(*zip_list)
+    x_val,y_val = zip(*val_set)
+    x = np.array(x)
+    y = np.array(y)
+    x_val = np.array(x_val)
+    y_val = np.array(y_val)
+    return x_val ,y_val ,x ,y
