@@ -70,10 +70,10 @@ doc(params,results,H)
 
 #save model to JSON
 model_json = model.to_json()
-with open(f"{model_path}{params["epochs"]}_{file_path[3:]}.json", "w") as json_file:
+with open(f"{model_path}{params['epochs']}_{file_path[3:]}.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save_weights(f"{model_path}{params["epochs"]}_{file_path[3:]}_Weights.h5")
+model.save_weights(f"{model_path}{params['epochs']}_{file_path[3:]}_Weights.h5")
 print("Saved model to disk")
 
 
