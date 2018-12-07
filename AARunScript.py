@@ -16,13 +16,21 @@ from LabnotesDoc import doc
 
 params = {'img_size_x':224,'img_size_y':224,'norm':False,'color':True, 'pretrain':None, "equal_data":False, "shuffle": True, "epochs": 50 , "val_size":2000,"test_size":4000, "Batch_size": 16}
 file_path = r"D:\kaggleDR"
+pickle_path = r"D:\pickles\kaggleDR"
+model_path = r"D:\models\Epochs_"
 config_desktop()
 
 print('Pickle cant handle 4gb, split it up')
 
 try:
     print("Try to import pickle")
-    zippy = pickle.load(open( r"D:\pickles\kaggleDR.p", "rb" ))
+    try:
+    	zippy = pickle.load(open( f"{pickle_path}.p", "rb" ))
+    except:
+    	zippy = pickle.load(open( f"{pickle_path}_part1.p", "rb" ))
+    	zippy2 = pickle.load(open( f"{pickle_path}_part2.p", "rb" ))
+    	zippy.append(zippy2)
+
     print("succeed to import pickle")
     zippy = list(zippy)
     random.shuffle(zippy)
@@ -37,9 +45,12 @@ except:
     x,y = import_kaggleDR(file_path, params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
     if params["equal_data"] == True:
         x,y = equal_data_run(y,x)
-
     zip_melanoom = zip(x,y)
-    pickle.dump( zip_melanoom, open( r"D:\pickles\kaggleDR.p", "wb" ))
+    if len(zip_melanoom) > 20000:
+    	pickle.dump( zip_melanoom[:int(len(zip_melanoom)/2)], open( f"{pickle_path}_part1.p", "wb" ))
+    	pickle.dump( zip_melanoom[int(len(zip_melanoom)/2):], open( f"{pickle_path}_part2.p", "wb" ))
+    else:
+    	pickle.dump( zip_melanoom, open( f"{pickle_path}.p", "wb" ))
     zippy = list(zip_melanoom)
     random.shuffle(zippy)
     x,y = zip(*zippy)
@@ -59,10 +70,10 @@ doc(params,results,H)
 
 #save model to JSON
 model_json = model.to_json()
-with open(r"D:\models\Epochs_50_kaggleDR.json", "w") as json_file:
+with open(f"{model_path}{params["epochs"]}_{file_path[3:]}.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save_weights(r"D:\models\weights\Epochs_50_kaggleDR.h5")
+model.save_weights(f"{model_path}{params["epochs"]}_{file_path[3:]}_Weights.h5")
 print("Saved model to disk")
 
 
