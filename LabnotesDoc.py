@@ -38,26 +38,26 @@ def doc(par,res,H,doc_path):
     all_times = "Floris Fok \n" + str(t.tm_year)+"/" + str(t.tm_mon) +"/"+ str(t.tm_mday) +"      At: "+ str(t.tm_hour) +":" + str(t.tm_min)  +":"+ str(t.tm_sec)
 
 
+    if H != None:
+        f.write(f"{all_times}\n \n \n The params where: {params} \n \n \n The results where: {results}")
+        fig = plt.figure(figsize=(3, 6))
+        plt.plot(H.history['acc'])
+        plt.plot(H.history['val_acc'])
+        plt.title('model accuracy')
+        plt.ylabel('accuracy')
+        plt.xlabel('epoch')
+        plt.legend(['train', 'test'], loc='upper left')
+        fig_str = f"{doc_path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureACC0{t.tm_hour}{t.tm_min}.png"
+        fig.savefig(fig_str, dpi=fig.dpi)
 
-    f.write(f"{all_times}\n \n \n The params where: {params} \n \n \n The results where: {results}")
-    fig = plt.figure(figsize=(3, 6))
-    plt.plot(H.history['acc'])
-    plt.plot(H.history['val_acc'])
-    plt.title('model accuracy')
-    plt.ylabel('accuracy')
-    plt.xlabel('epoch')
-    plt.legend(['train', 'test'], loc='upper left')
-    fig_str = f"{doc_path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureACC0{t.tm_hour}{t.tm_min}.png"
-    fig.savefig(fig_str, dpi=fig.dpi)
-
-    fig = plt.figure(figsize=(3, 6))
-    plt.plot(H.history['loss'])
-    plt.plot(H.history['val_loss'])
-    plt.title('model loss')
-    plt.ylabel('loss')
-    plt.xlabel('epoch')
-    plt.legend(['train', 'test'], loc='upper left')
-    fig_str2 = f"{doc_path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureLOSS&ACC0{t.tm_hour}{t.tm_min}.png"
-    fig.savefig(fig_str2, dpi=fig.dpi)
-    f.write(f"\nFigure name: \n{fig_str}"+"\n" + f"{fig_str2}")
-    plt.show()
+        fig = plt.figure(figsize=(3, 6))
+        plt.plot(H.history['loss'])
+        plt.plot(H.history['val_loss'])
+        plt.title('model loss')
+        plt.ylabel('loss')
+        plt.xlabel('epoch')
+        plt.legend(['train', 'test'], loc='upper left')
+        fig_str2 = f"{doc_path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureLOSS&ACC0{t.tm_hour}{t.tm_min}.png"
+        fig.savefig(fig_str2, dpi=fig.dpi)
+        f.write(f"\nFigure name: \n{fig_str}"+"\n" + f"{fig_str2}")
+        #plt.show()

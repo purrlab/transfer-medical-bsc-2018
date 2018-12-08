@@ -97,15 +97,16 @@ def run_experiment3(name_data,name_data2, img_size_x, img_size_y, demension, Bat
 
 def test_script():
     params = {'img_size_x':48,'img_size_y':48,'norm':False,'color':False, 'pretrain':None, "equal_data":True, "shuffle": True, "epochs": 3 , "val_size":10,"test_size":20, "Batch_size": 2}
-    file_path = r"D:\Miniset"
-    config_desktop()
+    file_path = r"C:\Miniset"
+    doc_path =  r"C:\Users\Flori\Documents\GitHub\t"
+    #config_desktop()
 
     x,y = import_dogcat(file_path, params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
     if params["equal_data"] == True:
         x,y = equal_data_run(y,x)
 
     zip_melanoom = zip(x,y)
-    pickle.dump( zip_melanoom, open( r"C:\Users\Floris\Documents\GitHub\pickles\test.p", "wb" ))
+    pickle.dump( zip_melanoom, open( r"C:\Users\Flori\Documents\GitHub\pickles\test.p", "wb" ))
     zippy = list(zip_melanoom)
     random.shuffle(zippy)
     x,y = zip(*zippy)
@@ -121,11 +122,11 @@ def test_script():
 
     results = {'score':score,"acc_epoch":H.history['acc'],"val_acc_epoch":H.history['val_acc'],"loss_epoch":H.history['loss'],"vall_loss_epoch":H.history['val_loss']}
 
-    doc(params,results,H)
+    doc(params,results,H, doc_path)
 
 def menegola_plane():
     params = {'img_size_x':224,'img_size_y':224,'norm':False,'color':True, 'pretrain':None, "equal_data":True, "shuffle": True, "epochs": 50 , "val_size":200,"test_size":300, "Batch_size": 16, "mela_class":"three"}
-    file_path = r"D:\ISIC\ISIC-2017_Training_Data"
+    file_path = r"C:\ISIC\ISIC-2017_Training_Data"
     config_desktop()
 
     try:
