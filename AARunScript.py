@@ -14,13 +14,22 @@ from LabnotesDoc import doc
 
 # test_script()
 
-params = {'img_size_x':224,'img_size_y':224,'norm':False,'color':True, 'pretrain':None, "equal_data":False, "shuffle": True, "epochs": 50 , "val_size":2000,"test_size":4000, "Batch_size": 16}
-file_path = r"D:\kaggleDR"
-pickle_path = r"D:\pickles\kaggleDR"
-model_path = r"D:\models\Epochs_"
-config_desktop()
+# params = {'img_size_x':224,'img_size_y':224,'norm':False,'color':True, 'pretrain':None, "equal_data":False, "shuffle": True, "epochs": 50 , "val_size":2000,"test_size":5000, "Batch_size": 16}
+# file_path = r"D:\kaggleDR"
+# pickle_path = r"D:\pickles\kaggleDR"
+# model_path = r"D:\models\Epochs_"
+# doc_path =  r"C:\Users\Floris\Documents\GitHub\t"
+# config_desktop()
+params = { "Data":'cat_dogmini','img_size_x':224,'img_size_y':224,'norm':False,'color':True, 'pretrain':None, "equal_data":False, "shuffle": True, "epochs": 2 , "val_size":50,"test_size":50, "Batch_size": 1}
+## intergreren van data naam en path name   
 
-print('Pickle cant handle 4gb, split it up')
+file_path = r"C:\Users\s147057\Documents\BEP\pet set"
+pickle_path = r"C:\Users\s147057\Documents\BEP\Pickle"
+model_path = r"C:\Users\s147057\Documents\BEP\models"
+doc_path =  r"C:\Users\s147057\Documents\GitHub\t"
+
+laptop = True
+
 
 try:
     print("Try to import pickle")
@@ -42,15 +51,17 @@ try:
 
 except:
     print("Failed to import pickle")    
-    x,y = import_kaggleDR(file_path, params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
+    #x,y = import_kaggleDR(file_path, params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
+    x,y = import_dogcat(file_path,params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
     if params["equal_data"] == True:
         x,y = equal_data_run(y,x)
-    zip_melanoom = zip(x,y)
-    if len(zip_melanoom) > 20000:
-    	pickle.dump( zip_melanoom[:int(len(zip_melanoom)/2)], open( f"{pickle_path}_part1.p", "wb" ))
-    	pickle.dump( zip_melanoom[int(len(zip_melanoom)/2):], open( f"{pickle_path}_part2.p", "wb" ))
+
+    zip_melanoom = zip(list(x),list(y))
+    if len(y) > 20000:
+        pickle.dump( zip_melanoom[:int(len(y)/2)], open( f"{pickle_path}_part1.p", "wb" ))
+        pickle.dump( zip_melanoom[int(len(y)/2):], open( f"{pickle_path}_part2.p", "wb" ))
     else:
-    	pickle.dump( zip_melanoom, open( f"{pickle_path}.p", "wb" ))
+     	pickle.dump( zip_melanoom, open( f"{pickle_path}.p", "wb" ))
     zippy = list(zip_melanoom)
     random.shuffle(zippy)
     x,y = zip(*zippy)
@@ -59,21 +70,26 @@ except:
     x_test,y_test,x,y = val_split(x,y, params["test_size"])
     x_val,y_val,x,y = val_split(x,y, params["val_size"])
 
+if laptop == True:
+    x = x[:20]
+    y = y[:20]
 
 
 model = make_model(x, y, w = params['pretrain'])
-H, score, model = train_model(model,x,y,x_val,y_val,x_test,y_test, params["epochs"], params["Batch_size"])
+
+if params['pretrain'] == None:
+    H, score, model = train_model(model,x,y,x_val,y_val,x_test,y_test, params["epochs"], params["Batch_size"])
 
 results = {'score':score,"acc_epoch":H.history['acc'],"val_acc_epoch":H.history['val_acc'],"loss_epoch":H.history['loss'],"vall_loss_epoch":H.history['val_loss']}
 
-doc(params,results,H)
+doc(params,results,H,doc_path)
 
 #save model to JSON
 model_json = model.to_json()
-with open(f"{model_path}{params['epochs']}_{file_path[3:]}.json", "w") as json_file:
+with open(f"{model_path}{params['epochs']}_{params['Data']}.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save_weights(f"{model_path}{params['epochs']}_{file_path[3:]}_Weights.h5")
+model.save_weights(f"{model_path}{params['epochs']}_{params['Data']}_Weights.h5")
 print("Saved model to disk")
 
 
