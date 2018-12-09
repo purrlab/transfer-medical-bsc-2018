@@ -33,14 +33,14 @@ def make_model(x, y, w = None):
             layer.trainable = False
         fine_tune = tf.keras.layers.Dense(500, activation='relu')(vgg_conv.output)
         fine_tune = tf.keras.layers.Dense(350, activation='relu')(fine_tune)
-        fine_tune = tf.keras.layers.Dense(numb_classes, activation='sigmoid')(fine_tune)
+        fine_tune = tf.keras.layers.Dense(y.shape[1], activation='sigmoid')(fine_tune)
         vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
     else:
         c = int(y.shape[1])
         vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=c)
         
-    for layer in vgg_conv.layers:
-        print(layer, layer.trainable)
+    # for layer in vgg_conv.layers:
+    #     print(layer, layer.trainable)
     opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.01, decay=0.0, nesterov=True)
     #opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.90)
     vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'

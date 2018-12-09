@@ -19,7 +19,7 @@ import time
 def doc(par,res,H,doc_path):
 
     t = time.localtime()
-    file_name= f"{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_RESULTS00{t.tm_hour}{t.tm_min}.txt"
+    file_name= f"{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_RESULTS00{t.tm_hour}{t.tm_min}{t.tm_sec}.txt"
 
     f= open(r"{}ransfer-medical-bsc-2018\LAB\{}".format(doc_path,file_name),"w+")
 
@@ -37,9 +37,8 @@ def doc(par,res,H,doc_path):
 
     all_times = "Floris Fok \n" + str(t.tm_year)+"/" + str(t.tm_mon) +"/"+ str(t.tm_mday) +"      At: "+ str(t.tm_hour) +":" + str(t.tm_min)  +":"+ str(t.tm_sec)
 
-
+    f.write(f"{all_times}\n \n \n The params where: {params} \n \n \n The results where: {results}")
     if H != None:
-        f.write(f"{all_times}\n \n \n The params where: {params} \n \n \n The results where: {results}")
         fig = plt.figure(figsize=(3, 6))
         plt.plot(H.history['acc'])
         plt.plot(H.history['val_acc'])
