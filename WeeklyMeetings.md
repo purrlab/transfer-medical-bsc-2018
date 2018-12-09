@@ -153,3 +153,34 @@ I did not really achieve to mimic the results, is this now a new top priority or
 
 Had a busy week, UEFA took full 3 days... Work 1 full day, so just 3 left for uni. 
 
+ ## Week 5
+### Date: 09-12-2018
+
+#### What did you achieve?
+
+* replicated the results of menegola ===  https://docs.google.com/spreadsheets/d/1X9ahOiyy6TcOCcBIfZuvBjlhPI0CqwwM57AzElSJojo/edit?usp=sharing
+* made it all work, no generator was needed, the data set was 4.5gb after it was resized to the 2242243 format
+* cant remeber every thing 
+* mini data set test()
+
+#### What did you struggle with?
+
+* Needed to re-intsall windows and reboot my desktop on friday nigth, fun fun fun
+* The data argumentation is just to big, maybe we need to take a different approach
+* One output was stuck on 0.33 acc, this showed how much models change by just re running. But running every thing 5 times,
+would have taken too much time
+
+#### What would you like to work on next week?
+
+* Get the data sets i need and wrigth import functions + the overview
+* Deep dream visualisation (individual lager output images)
+* Make the experiment " correct" and ready for research.
+
+
+
+#### Where do you need help from Veronika?
+
+* need help on finding things i need help with
+
+#### Any other topics
+Let's run it on your pc? 
