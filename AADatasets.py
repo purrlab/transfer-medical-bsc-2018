@@ -409,16 +409,4 @@ def equal_data_run(y_new,x_new):
     return x_new,y_new
 
 def val_split(x,y, val_size):
-    val_set = []
-    zip_list = list(zip(x,y))
-    for i in range(0,val_size):
-        random.shuffle(zip_list)
-        new_val = zip_list.pop()
-        val_set.append(new_val)
-    x,y = zip(*zip_list)
-    x_val,y_val = zip(*val_set)
-    x = np.array(x)
-    y = np.array(y)
-    x_val = np.array(x_val)
-    y_val = np.array(y_val)
-    return x_val ,y_val ,x ,y
+    return x[:val_size] ,y[:val_size] ,x[val_size:] ,y[val_size:]
