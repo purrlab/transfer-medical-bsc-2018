@@ -39,17 +39,18 @@ def doc(par,res,H,doc_path):
 
     f.write(f"{all_times}\n \n \n The params where: {params} \n \n \n The results where: {results}")
     if H != None:
-        fig = plt.figure(figsize=(3, 6))
+        fig = plt.figure(num=None, figsize=(24, 12), dpi=80, facecolor='w', edgecolor='k')
+        plt.subplot(121)
         plt.plot(H.history['acc'])
         plt.plot(H.history['val_acc'])
         plt.title('model accuracy')
         plt.ylabel('accuracy')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        fig_str = f"{doc_path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureACC0{t.tm_hour}{t.tm_min}.png"
-        fig.savefig(fig_str, dpi=fig.dpi)
-
-        fig = plt.figure(figsize=(3, 6))
+        # fig_str = f"{doc_path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureACC0{t.tm_hour}{t.tm_min}.png"
+        # fig.savefig(fig_str, dpi=fig.dpi)
+        # fig = plt.figure(num=None, figsize=(24, 12), dpi=80, facecolor='w', edgecolor='k')
+        plt.subplot(122)
         plt.plot(H.history['loss'])
         plt.plot(H.history['val_loss'])
         plt.title('model loss')

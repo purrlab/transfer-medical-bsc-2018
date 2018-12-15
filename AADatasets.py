@@ -3,15 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import tensorflow as tf
-# from tensorflow.applications import VGG16
 import sklearn
 from sklearn import datasets, svm, metrics
 import os
 import random
 import pandas
 import time
+import pickle
 
-def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "two"):
+def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "two_combined"):
     '''
     doc string
     '''
@@ -210,73 +210,64 @@ def import_dogcat(path, img_size_x,img_size_y, norm, color):
     print(f"This Dog_Cat dataset contains the following: \nTotal length Dataset = {len(x)} ")
     return x, y
 
-def import_mnist(split, norm, limit = None):
-    '''
-    Creert data set van de mnist data.
-    input: Normalize boolean
-    output: train en test data set, each having their own list of classes and images.
-    '''
+def import_chest(path, img_size_x,img_size_y, norm, color):
+    #DIR = r"C:\Users\Floris\Documents\Python scripts\PetImages"
+    try: 
+        types = list(os.listdir(path))
+        print('Directory found')
+    except:
+        print('Directory not Found')
 
-    mnist = tf.keras.datasets.mnist
-    (x_train, y_train),(x_test, y_test) = mnist.load_data()
-    x = np.append(x_test,x_train,axis=0)
-    y = np.append(y_test,y_train,axis=0)
+    training_data = list()
+    training_class = list()
 
-    if limit:
-        x = x[:limit]
-        y = y[:limit]
+    for type_set in types:
+        path2 = os.path.join(path, type_set)
+        cat = list(os.listdir(path2))
+        
+        for category in cat:
+            class_num = cat.index(category)
+            path3 = os.path.join(path2, category)
+            start = time.time()
+            i = 0
+            size = len(list(os.listdir(path3)))
+            for img in os.listdir(path3):
+                try:
+                    if color:
+                        D = 3
+                        img_array = cv2.imread(os.path.join(path3,img), cv2.IMREAD_COLOR)
+                        new_array = cv2.resize(img_array,(img_size_x, img_size_y))
+                        
+                    else:
+                        D = 1
+                        img_array = cv2.imread(os.path.join(path3,img), cv2.IMREAD_GRAYSCALE)
+                        new_array = cv2.resize(img_array,(img_size_x, img_size_y))
+                        print("done")
+                    training_data.append(new_array)
+                    if class_num == 0:
+                        training_class.append([1,0])
+                    elif class_num == 1:
+                        training_class.append([0,1])
+                except Exception as e:
+                    pass
+                loading(size,i,start, "Chest data import")
+                i+=1
+            print("\n")
+
+    zip_list = list(zip(training_data,training_class))
+    random.shuffle(zip_list)
+    training_data,training_class = zip(*zip_list)
+    x = np.array(training_data).reshape(-1,img_size_x, img_size_y,D)
+    y = np.array(training_class).reshape(-1,len(cat))
 
     if type(norm) != bool:
         print("please enter 'boolean' for norm(alization)")
 
-    test_split = 0.25
-    val_split = 0.1
-
-    spl = int(test_split*len(x))
-    X = x[spl:]
-    Y = y[spl:]
-    x_test  = x[:spl]
-    y_test  = y[:spl]
-
-    spl2 = int(val_split*len(X))
-    x_val = x[:spl2]
-    y_val = y[:spl2]
-    x_train = X[spl2:]
-    y_train = Y[spl2:]
-
     if norm:
-        x_train, x_val, x_test = x_train / 255.0, x_val / 255.0, x_test / 255.0
+        x = x/ 255.0
 
-
-
-    print(f"This Mnist dataset contains the following: \nTotal length Dataset = {len(x)} \nTotal length train set = {len(x_train)} \nTotal length val set = {len(x_val)} \nTotal length test set= {len(x_test)}")
-    return x_train, y_train, x_val, y_val, x_test, y_test
-
-
-
-def train_val_test():
-    #make consistent test set, and variable train sets
-    pass
-
-def pre_processing(X,img_size_x,img_size_y,demension):
-    #def transform_img_list(X,img_size_x,img_size_y,demension):
-    '''
-    Door bijvoorbeeld te kleine afbeeldingen, wordt de data getransformeerd naar een ander formaat, later kan hier nog data generators aan toegevoegd worden
-    input: lijst met afbeeldingen, en de afmeting van de gewenste afbeelding.
-    output: Lijst met afbeeldingen getrasformeerd naar de afmeting.
-    '''
-    if type(X) != np.ndarray and type(X) != list:
-        print("Please enter a list or np.array")
-    if img_size_x < 48 or img_size_y < 48:
-        print("img_size is too small, VGG16 needs an image size larger than 48X48")
-
-    train_data = []
-    for img in X:
-        resized_image = cv2.resize(img, (img_size_x, img_size_y))
-        train_data.append(resized_image)
-
-    X = np.array(train_data).reshape(-1,img_size_x,img_size_y,demension)
-    return X
+    print(f"This Dog_Cat dataset contains the following: \nTotal length Dataset = {len(x)} ")
+    return x, y
 
 def make_pre_train_classes(Y, numb_classes = None):
     '''
@@ -300,24 +291,53 @@ def make_pre_train_classes(Y, numb_classes = None):
     clas_np = np.array(clas).reshape(-1,numb_classes)
     return clas_np, numb_classes
 
-def get_data(name_data,name_data2, img_size_x,img_size_y, norm, color = False):
-    if name_data == 'mela':
-        x_train, y_train, x_val, y_val, x_test, y_test = import_melanoom(img_size_x,img_size_y, norm, color)
-    elif name_data == 'catdog':
-        x_train, y_train, x_val, y_val, x_test, y_test = import_dogcat(img_size_x,img_size_y, norm, color)
-    else:
-        x_train, y_train, x_val, y_val, x_test, y_test = None,None,None,None,None,None
-        print('There is no data set with that name')        
+def get_data(params):
+    try:
+        print("Try to import pickle")
+        if params["Data"] == 'ISIC':
+            zippy = pickle.load(open( f"{params['pickle_path']}{params['data_name']}.p", "rb" ))
+        else:
+            try:
+                zippy = list(pickle.load(open( f"{params['pickle_path']}.p", "rb" )))
+            except:
+                zippy = list(pickle.load(open( f"{params['pickle_path']}_part1.p", "rb" )))
+                zippy2 = list(pickle.load(open( f"{params['pickle_path']}_part2.p", "rb" )))
+                zippy.extend(zippy2)
+        print("succeed to import pickle")
+        random.shuffle(zippy)
+        x,y = zip(*zippy)
+        x = np.array(x)
+        y = np.array(y)
+        x_test,y_test,x,y = val_split(x,y, params["test_size"])
+        x_val,y_val,x,y = val_split(x,y, params["val_size"])
 
-    if name_data2 == 'mela':
-        x_train2, y_train2, x_val2, y_val2, x_test2, y_test2 = import_melanoom(img_size_x,img_size_y, norm, color)
-    elif name_data2 == 'catdog':
-        x_train2, y_train2, x_val2, y_val2, x_test2, y_test2 = import_dogcat(img_size_x,img_size_y, norm, color)
-    else:
-        print('Warning: No second set')
-        x_train2, y_train2, x_val2, y_val2, x_test2, y_test2 = None,None,None,None,None,None
-    print('Train, Val and test sets created')
-    return x_train, y_train, x_val, y_val, x_test, y_test, x_train2, y_train2, x_val2, y_val2, x_test2, y_test2
+    except:
+        print("Failed to import pickle")    
+        if params["Data"] == 'DogCat':
+            x,y = import_dogcat(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
+        elif params["Data"] == 'KaggleDR':
+            x,y = import_kaggleDR(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
+        elif params["Data"] == 'ISIC':
+            x,y = import_melanoom(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"],classes =params["data_name"])
+        elif params["Data"] == 'Chest':
+            x,y = import_chest(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
+        x = list(x)
+        y = list(y)
+        zip1 = zip(x[int(len(y)/2):],y[int(len(y)/2):])
+        zip2 = zip(x[:int(len(y)/2)],y[:int(len(y)/2)])
+        pickle.dump( zip1, open( f"{params['pickle_path']}_part1.p", "wb" ))
+        pickle.dump( zip2, open( f"{params['pickle_path']}_part2.p", "wb" ))
+        zip_both = zip(x,y)
+        zippy = list(zip_both)
+        random.shuffle(zippy)
+        x,y = zip(*zippy)
+        x = np.array(x)
+        y = np.array(y)
+        x_test,y_test,x,y = val_split(x,y, params["test_size"])
+        x_val,y_val,x,y = val_split(x,y, params["val_size"])
+    return x,y,x_val,y_val,x_test,y_test
+
+
 
 
 def count_classes(Y):
@@ -340,6 +360,31 @@ def count_classes(Y):
         else:
             d[n] = 1
     return d
+
+def determen_weights(classes):
+    
+    back_to_num = list()
+    list_classes = list(classes)
+    for i in list_classes:
+        back_to_num.append(list(i).index(1))
+        
+    class_dict = dict()
+    for n in back_to_num:
+        if n in class_dict:
+            class_dict[n] += 1
+        else:
+            class_dict[n] = 1
+    list_class_index = list(range(0,len(list(class_dict.keys()))))
+    for key in class_dict.keys():
+        list_class_index[key] = class_dict[key] 
+    
+    weights = dict()
+    for c in list_class_index:
+        num = (int(sum(list_class_index)/c))
+        if num < 1:
+            num = 1
+        weights[list_class_index.index(c)] = float(num)
+    return weights
 
 def loading(size,i,start, name):
     stop = time.time()

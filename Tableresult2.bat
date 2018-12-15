@@ -17,3 +17,4 @@ python run1.py 1107
 python run1.py 1117
 python run1.py 1207
 python run1.py 1217
+python AARunScript.py

@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import tensorflow as tf
-# from tensorflow.applications import VGG16
 from itertools import cycle
 import sklearn
 from sklearn import datasets, svm, metrics
