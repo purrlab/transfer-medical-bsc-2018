@@ -16,8 +16,8 @@ params = {"Data":'ISIC',
         "style":style[z],
         "model":model[x],
         "file_path":r"C:\ISIC",
-        "pickle_path":r"C:\pickles\save_melanoom_color_",
-        "model_path":r"C:\models\Epochs_50_Chest.json",
+        "pickle_path":r"C:\pickles\melanoom_color_NotEqual_",
+        "model_path":r"C:\models\Epochs_5_kaggleDR.json",
         "RandomSeed":r,
         "doc_path":r"C:\Users\Flori\Documents\GitHub\t",
         'img_size_x':224,
@@ -28,10 +28,11 @@ params = {"Data":'ISIC',
         "equal_data":False, 
         "shuffle":True, 
         "epochs":50 , 
-        "val_size":300,
-        "test_size":400, 
+        "val_size":100,
+        "test_size":200, 
         "Batch_size":16
         }
 
+#"pickle_path":r"C:\pickles\save_melanoom_color_",
 
 run_target(params)

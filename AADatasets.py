@@ -16,10 +16,11 @@ def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "
     doc string
     '''
     try: 
-        data_frame = pandas.read_csv(r"C:\Users\Flori\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")
+        first_folder = os.listdir(DIR)
+        data_frame = pandas.read_csv(os.path.join(DIR,first_folder[1]))
         data_frame = data_frame.set_index("image_id")
-        os.listdir(DIR)
-        data_dir = DIR
+
+        data_dir = os.path.join(DIR,first_folder[0])
         print('Found directory')
     except:
         print("Directory path not found")
@@ -27,47 +28,44 @@ def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "
     # data_dir=r"C:\Users\s147057\Documents\Python Scripts\ISIC-2017_Training_Data"
     training_data = []
     target_data = []
-
+    size = 2000
     L = os.listdir(data_dir)
-    L.reverse() # omdraaien van de lijst zorgt voor meer diversiteit van classes. 
-    size = 1372+374
     start = time.time()
+    print(data_dir)
     i = 0
-    for img in L[:-1]:
+    for img in L:
         if 'superpixels' in img:
             continue
+        class_num = data_frame.loc[img[0:-4],:]
+        if classes == "two":
+            size = 1372+374
+            if class_num[0] == 1:
+                class_num = [0,1]
+            elif class_num[1] == 1:
+                continue
+                class_num = [0,1]
+            else:
+                class_num = [1,0]
+            c = 2
+        elif classes == "three":
+            size = 2000
+            if class_num[0] == 1:
+                class_num = [0,1,0]
+            elif class_num[1] == 1:
+                class_num = [0,0,1]
+            else:
+                class_num = [1,0,0]
+            c = 3
+        elif classes == "two_combined":
+            size = 2000
+            if class_num[0] == 1:
+                class_num = [0,1]
+            elif class_num[1] == 1:
+                class_num = [0,1]
+            else:
+                class_num = [1,0]
+            c = 2
         try:
-            
-            class_num = data_frame.loc[img[0:-4],:]
-            if classes == "two":
-                size = 1372+374
-                if class_num[0] == 1:
-                    class_num = [0,1]
-                elif class_num[1] == 1:
-                    continue
-                    class_num = [0,1]
-                else:
-                    class_num = [1,0]
-                c = 2
-            elif classes == "three":
-                size = 2000
-                if class_num[0] == 1:
-                    class_num = [0,1,0]
-                elif class_num[1] == 1:
-                    class_num = [0,0,1]
-                else:
-                    class_num = [1,0,0]
-                c = 3
-            elif classes == "two_combined":
-                size = 2000
-                if class_num[0] == 1:
-                    class_num = [0,1]
-                elif class_num[1] == 1:
-                    class_num = [0,1]
-                else:
-                    class_num = [1,0]
-                c = 2
-
             if color:
                 D = 3
                 img_array = cv2.imread(os.path.join(data_dir,img), cv2.IMREAD_COLOR)
@@ -326,11 +324,19 @@ def get_data(params):
             x,y = import_chest(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
         x = list(x)
         y = list(y)
-        zip1 = zip(x[int(len(y)/2):],y[int(len(y)/2):])
-        zip2 = zip(x[:int(len(y)/2)],y[:int(len(y)/2)])
-        pickle.dump( zip1, open( f"{params['pickle_path']}_part1.p", "wb" ))
-        pickle.dump( zip2, open( f"{params['pickle_path']}_part2.p", "wb" ))
-        zip_both = zip(x,y)
+        if params["Data"] == 'ISIC':
+            zip_both = zip(x,y)
+            pickle.dump( zip_both, open(f"{params['pickle_path']}{params['data_name']}.p", "wb" ))
+        elif len(y) < 15000:
+            zip_both = zip(x,y)
+            pickle.dump( zip_both, open( f"{params['pickle_path']}.p", "wb" ))
+        else:
+            zip1 = zip(x[int(len(y)/2):],y[int(len(y)/2):])
+            zip2 = zip(x[:int(len(y)/2)],y[:int(len(y)/2)])
+            pickle.dump( zip1, open( f"{params['pickle_path']}_part1.p", "wb" ))
+            pickle.dump( zip2, open( f"{params['pickle_path']}_part2.p", "wb" ))
+            zip_both = zip(x,y)
+
         zippy = list(zip_both)
         random.shuffle(zippy)
         x,y = zip(*zippy)
