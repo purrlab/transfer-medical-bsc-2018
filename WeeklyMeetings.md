@@ -184,3 +184,32 @@ would have taken too much time
 
 #### Any other topics
 Let's run it on your pc? 
+
+ ## Week 6
+### Date: 18-12-2018
+
+#### What did you achieve?
+* Result file, with more than 4 models, 3 random seeds. 72 auc values... 
+* Small dataset table
+* Report layout
+
+#### What did you struggle with?
+
+* Sometimes the model doesn't train, it could be a bug of keras, because it happens at random.... or i'm making rookie mistakes
+* The balancing of data sets is still a hurdle with brings great inconsitencies.
+* to normalize or not to normalize...?
+
+#### What would you like to work on next week?
+
+* Get some results in the other direction, does another data set give the same values? 
+* maybe repeat a few chest FT runs
+* Starting with LaTeX, let's not push this to the last two weeks.
+* Melonoma on weigths? --> maybe monday nigth
+
+
+#### Where do you need help from Veronika?
+
+* need help on finding things i need help with
+
+#### Any other topics
+Let's run it on your pc? 
