@@ -27,28 +27,11 @@ def run_target(params):
     d[0] = params["data_name"]
     m[0] = params["model"]
 
-    
-
-
     super_script = True
     if super_script == True:
         for style in s:
             for data_name in d:
                 x,y,x_val,y_val,x_test,y_test = get_data(params)
-                # try:
-                #     print("Try to import pickle")
-                #     zippy = pickle.load(open( f"{params["pickle_path"]}{params["data_name"]}.p", "rb" ))
-                #     print("succeed to import pickle")
-                #     zippy = list(zippy)
-                #     random.shuffle(zippy)
-                #     x,y = zip(*zippy)
-                #     x = np.array(x)
-                #     y = np.array(y)
-                #     x_test,y_test,x,y = val_split(x,y, params["test_size"])
-                #     x_val,y_val,x,y = val_split(x,y, params["val_size"])
-                # except:
-                #     print("Failed to import pickle")
-
                 for method in m:
                     config_desktop()
 

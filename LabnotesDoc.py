@@ -1,20 +1,7 @@
 '''### LAPNOTES AUTOMATE --> write txt file with used params and datum and allllll ''' 
-
-## oplost ##
-
-# save result fig with date.
-# save results and params in txt in a file.
-# versie van fucntie vermelden.
 import matplotlib.pyplot as plt
 import numpy as np
 import time
-
-# fig.savefig('path/to/save/image/to.png')   # save the figure to file
-# plt.close(fig)    # close the figure
-
-# par = {"epochs":5, "size":10000, "model":"VGG"}
-# res = {"AUC":[0.1,0.2,0.3,0.4,0.5], "acc":0.99, "loss":0.66}
-# fig_str = "Results_1.fig"
 
 def doc(par,res,H,doc_path):
 
