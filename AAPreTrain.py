@@ -22,24 +22,25 @@ def make_model(x, y, w = None):
         vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
     else:
         c = int(y.shape[1])
-        vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=c*50)
-        fine_tune = tf.keras.layers.Dense(c*10, activation='relu')(vgg_conv.output)
-        fine_tune = tf.keras.layers.Dense(y.shape[1], activation='sigmoid')(fine_tune)
-        vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
+        vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=c)
+        # fine_tune = tf.keras.layers.Dense(c*10, activation='relu')(vgg_conv.output)
+        # fine_tune = tf.keras.layers.Dense(y.shape[1], activation='softmax')(fine_tune)
+        # vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
         
     for layer in vgg_conv.layers:
         print(layer, layer.trainable)
-    opt = tf.keras.optimizers.SGD(lr=0.0001, momentum=0.01, decay=0.0, nesterov=True)
+    opt = tf.keras.optimizers.SGD(lr=0.0009, momentum=0.01, decay=0, nesterov=True)
     #opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.90)
-    vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'
+    vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'categorical_crossentropy
     return vgg_conv
 
 def train_model(model,x_train,y_train,x_val,y_val,x_test,y_test, Epochs, Batch_size,weights_dict = None):
     # train models over AUC, for x epochs. make it loopable for further test. return plottable data
 
     stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10)
+    # check = tf.keras.callbacks.ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 
-    H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_val,y_val),shuffle=True, callbacks = [stop], class_weight = weights_dict)
+    H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_val,y_val),shuffle=True,  callbacks = [stop], class_weight = weights_dict)#,,callbacks =[check]
     score = roc_auc_score(y_test, model.predict(x_test))
     print(' AUC of model = ' ,score)
     return H, score, model

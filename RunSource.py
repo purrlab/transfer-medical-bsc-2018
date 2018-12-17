@@ -15,9 +15,7 @@ def run(params):
     config_desktop()
     x,y,x_val,y_val,x_test,y_test = get_data(params)
     # x,y,x_val,y_val,x_test,y_test =x[:1000],y[:1000],x_val[:1000],y_val[:1000],x_test[:1000],y_test[:1000] #SMALL TEST
-    if params["norm"] == True:
-        x = x/255
-        x = x.astype(np.float16)
+    # x, y = equal_data_run(y,x)
 
     model = make_model(x, y, w = params['pretrain'])
     weights = determen_weights(y)

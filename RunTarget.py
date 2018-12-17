@@ -27,7 +27,7 @@ def run_target(params):
     d[0] = params["data_name"]
     m[0] = params["model"]
 
-    random.seed(params["RandomSeed"])
+    
 
 
     super_script = True

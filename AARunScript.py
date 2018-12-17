@@ -40,20 +40,20 @@ params = {"Data":'KaggleDR',
 
 params = {"Data":'Chest',
         'file_path':r"C:\chest_xray",
-        'pickle_path':r"C:\pickles\Chest",
+        'pickle_path':r"C:\pickles\Chest_int",
         'model_path':r"C:\models\Epochs_",
         'doc_path':r"C:\Users\Flori\Documents\GitHub\t",
         'img_size_x':224,
         'img_size_y':224,
-        'norm':True,
+        'norm':False,
         'color':True,
         'pretrain':None,
         "equal_data":False, 
         "shuffle": True, 
-        "epochs": 50, 
-        "val_size":400,
-        "test_size":400, 
-        "Batch_size": 32
+        "epochs": 50,
+        "val_size":200,
+        "test_size":200, 
+        "Batch_size": 16
         }
 
 run(params)

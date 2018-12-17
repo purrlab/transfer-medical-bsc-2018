@@ -57,7 +57,8 @@ def doc(par,res,H,doc_path):
         plt.ylabel('loss')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
-        fig_str2 = f"{doc_path}{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureLOSS&ACC0{t.tm_hour}{t.tm_min}.png"
-        fig.savefig(fig_str2, dpi=fig.dpi)
+        fig_str = f"{doc_path[:-1]}figs\\{t.tm_year}_{t.tm_mon}_{t.tm_mday}_RUNEXPERIMENT_FigureLOSS&ACC0{t.tm_hour}{t.tm_min}.png"
+        fig.savefig(fig_str, dpi=fig.dpi)
+        fig_str2 = ' NONE '
         f.write(f"\nFigure name: \n{fig_str}"+"\n" + f"{fig_str2}")
         #plt.show()

@@ -16,7 +16,7 @@ def import_melanoom(DIR, img_size_x,img_size_y, norm, color = False, classes = "
     doc string
     '''
     try: 
-        data_frame = pandas.read_csv(r"C:\Users\Floris\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")
+        data_frame = pandas.read_csv(r"C:\Users\Flori\Documents\Python scripts\ISIC-2017_Training_Part3_GroundTruth.csv")
         data_frame = data_frame.set_index("image_id")
         os.listdir(DIR)
         data_dir = DIR
@@ -220,11 +220,12 @@ def import_chest(path, img_size_x,img_size_y, norm, color):
 
     training_data = list()
     training_class = list()
+    
 
     for type_set in types:
         path2 = os.path.join(path, type_set)
         cat = list(os.listdir(path2))
-        
+
         for category in cat:
             class_num = cat.index(category)
             path3 = os.path.join(path2, category)
@@ -252,6 +253,7 @@ def import_chest(path, img_size_x,img_size_y, norm, color):
                     pass
                 loading(size,i,start, "Chest data import")
                 i+=1
+
             print("\n")
 
     zip_list = list(zip(training_data,training_class))
@@ -292,10 +294,11 @@ def make_pre_train_classes(Y, numb_classes = None):
     return clas_np, numb_classes
 
 def get_data(params):
+    random.seed(params["RandomSeed"])
     try:
         print("Try to import pickle")
         if params["Data"] == 'ISIC':
-            zippy = pickle.load(open( f"{params['pickle_path']}{params['data_name']}.p", "rb" ))
+            zippy = list(pickle.load(open( f"{params['pickle_path']}{params['data_name']}.p", "rb" )))
         else:
             try:
                 zippy = list(pickle.load(open( f"{params['pickle_path']}.p", "rb" )))
@@ -420,7 +423,8 @@ def equal_data(x,y):
     y = np.array(y)
     
     bad = list()
-    
+    datagen =  tf.keras.preprocessing.image.ImageDataGenerator(rotation_range=360, fill_mode = "nearest")
+
     x_new = x
     y_new = y
     start = time.time()
@@ -432,8 +436,6 @@ def equal_data(x,y):
             continue
         if list(y[i]).index(1) in bad:
             continue
-        
-        datagen =  tf.keras.preprocessing.image.ImageDataGenerator(rotation_range=360, fill_mode = "nearest")
         img=datagen.random_transform(x[i])
         y_new = np.concatenate((y_new, np.array(y[i]).reshape(1,y.shape[1])))
         x_new = np.concatenate((x_new, np.array(img).reshape(1,img.shape[0], img.shape[1],img.shape[2])))
