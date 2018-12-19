@@ -9,28 +9,37 @@ from sklearn.metrics import roc_auc_score
 from sklearn import metrics
 
 
-def make_model(x, y, w = None):
+def make_model(x, y,params):
 
-    if w != None:
+    if params['model'] == 'imagenet':
         classes = 1000
-        vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=classes)
-        # for layer in vgg_conv.layers[:-5]:
-        #     layer.trainable = False
+        vgg_conv = tf.keras.applications.VGG16(weights=params["model"],input_shape = (x[0].shape), include_top=True, classes=classes)
         fine_tune = tf.keras.layers.Dense(500, activation='relu')(vgg_conv.output)
         fine_tune = tf.keras.layers.Dense(350, activation='relu')(fine_tune)
         fine_tune = tf.keras.layers.Dense(y.shape[1], activation='sigmoid')(fine_tune)
         vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
+
+    elif params['model'] == "Chest" or params['model'] == "KaggleDR" or params['model'] == "CatDog":
+        with open(params['model_path'][params['model']], 'r') as json_file:
+            loaded_model_json = json_file.read()
+        json_file.close()
+        loaded_model = tf.keras.models.model_from_json(loaded_model_json)
+        #Load weights into new model
+        loaded_model.load_weights(f"{params['model_path'][params['model']][:-5]}_Weights.h5")
+        print("Loaded model from disk")
+        fine_tune = tf.keras.layers.Dense(y.shape[1], activation='sigmoid')(model.output)
+        vgg_conv  = tf.keras.models.Model(inputs=model.input, outputs=fine_tune)
+
     else:
         c = int(y.shape[1])
-        vgg_conv = tf.keras.applications.VGG16(weights=w,input_shape = (x[0].shape), include_top=True, classes=c)
-        # fine_tune = tf.keras.layers.Dense(c*10, activation='relu')(vgg_conv.output)
-        # fine_tune = tf.keras.layers.Dense(y.shape[1], activation='softmax')(fine_tune)
-        # vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
-        
+        vgg_conv = tf.keras.applications.VGG16(weights=None,input_shape = (x[0].shape), include_top=True, classes=c)
+    
+    print("MODEL SUMMARY:")
     for layer in vgg_conv.layers:
         print(layer, layer.trainable)
+    print("END OF SUMMARY")
+
     opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.01, decay=0, nesterov=True)
-    #opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.90)
     vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'categorical_crossentropy
     return vgg_conv
 

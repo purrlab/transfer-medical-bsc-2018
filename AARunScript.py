@@ -20,6 +20,28 @@ params = {"Data":'CatDog',
         "Batch_size": 32
         }
 
+params = {"Data":'ISIC',
+        "data_name":['two_combined','three','two'],
+        "style":['FT','SVM'],
+        "model":None,
+        "file_path":r"C:\ISIC",
+        "pickle_path":r"C:\pickles\melanoom_color_NotEqual_",
+        "model_path":r"C:\models\Epochs_5_kaggleDR.json",
+        "RandomSeed":r,
+        "doc_path":r"C:\Users\Flori\Documents\GitHub\t",
+        'img_size_x':224,
+        'img_size_y':224,
+        'norm':False,
+        'color':True, 
+        'pretrain':None, 
+        "equal_data":False, 
+        "shuffle":True, 
+        "epochs":50 , 
+        "val_size":100,
+        "test_size":200, 
+        "Batch_size":16
+        }
+
 params = {"Data":'KaggleDR',
         'file_path':r"C:\kaggleDR",
         'pickle_path':r"C:\pickles\kaggleDR",

@@ -12,13 +12,6 @@ from LabnotesDoc import *
 
 def run_target(params):
 
-    with open(params["model_path"], 'r') as json_file:
-        loaded_model_json = json_file.read()
-    json_file.close()
-    loaded_model = tf.keras.models.model_from_json(loaded_model_json)
-    #Load weights into new model
-    loaded_model.load_weights(f"{params['model_path'][:-5]}_Weights.h5")
-    print("Loaded model from disk")
 
     s = list('a')
     d = list('a')
@@ -35,15 +28,8 @@ def run_target(params):
                 for method in m:
                     config_desktop()
 
-                    if method == "imagenet":
-                        model = make_model(x, y, w = 'imagenet')
 
-                    elif method == "kaggleDR":
-                        model = loaded_model
-                        fine_tune = tf.keras.layers.Dense(y.shape[1], activation='sigmoid')(model.output)
-                        model  = tf.keras.models.Model(inputs=model.input, outputs=fine_tune)
-                        opt = tf.keras.optimizers.SGD(lr=0.0009, momentum=0.01, decay=0.0, nesterov=True)
-                        model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+                    model = make_model(x, y, params)
 
                     if style == 'FT':
                         weights = determen_weights(y)
