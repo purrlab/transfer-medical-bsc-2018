@@ -20,6 +20,7 @@ def make_model(x, y,params):
         vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
 
     elif params['model'] == "Chest" or params['model'] == "KaggleDR" or params['model'] == "CatDog":
+        print(params['model_path'][params['model']])
         with open(params['model_path'][params['model']], 'r') as json_file:
             loaded_model_json = json_file.read()
         json_file.close()
@@ -27,8 +28,8 @@ def make_model(x, y,params):
         #Load weights into new model
         loaded_model.load_weights(f"{params['model_path'][params['model']][:-5]}_Weights.h5")
         print("Loaded model from disk")
-        fine_tune = tf.keras.layers.Dense(y.shape[1], activation='sigmoid')(model.output)
-        vgg_conv  = tf.keras.models.Model(inputs=model.input, outputs=fine_tune)
+        fine_tune = tf.keras.layers.Dense(y.shape[1], activation='sigmoid')(loaded_model.output)
+        vgg_conv  = tf.keras.models.Model(inputs=loaded_model.input, outputs=fine_tune)
 
     else:
         c = int(y.shape[1])
@@ -38,9 +39,8 @@ def make_model(x, y,params):
     for layer in vgg_conv.layers:
         print(layer, layer.trainable)
     print("END OF SUMMARY")
-
-    opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.01, decay=0, nesterov=True)
-    vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'categorical_crossentropy
+    # opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.01, decay=0, nesterov=True)
+    vgg_conv.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])  #'auc'categorical_crossentropy
     return vgg_conv
 
 def train_model(model,x_train,y_train,x_val,y_val,x_test,y_test, Epochs, Batch_size,weights_dict = None):
@@ -49,7 +49,7 @@ def train_model(model,x_train,y_train,x_val,y_val,x_test,y_test, Epochs, Batch_s
     stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10)
     # check = tf.keras.callbacks.ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 
-    H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_val,y_val),shuffle=True,  callbacks = [], class_weight = weights_dict)#,,callbacks =[check]
+    H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_val,y_val),shuffle=True,  callbacks = [stop], class_weight = weights_dict)#,,callbacks =[check]
     score = roc_auc_score(y_test, model.predict(x_test))
     print(' AUC of model = ' ,score)
     return H, score, model

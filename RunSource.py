@@ -13,7 +13,10 @@ from LabnotesDoc import *
 
 def run(params):
     config_desktop()
-    x,y,x_val,y_val,x_test,y_test = get_data(params)
+    x,y = get_data(params)
+    
+    x_test,y_test,x,y = val_split(x,y, params["test_size"])
+    x_val,y_val,x,y = val_split(x,y, params["val_size"])
     # x,y,x_val,y_val,x_test,y_test =x[:1000],y[:1000],x_val[:1000],y_val[:1000],x_test[:1000],y_test[:1000] #SMALL TEST
     # x, y = equal_data_run(y,x)
 

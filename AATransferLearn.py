@@ -20,7 +20,6 @@ def load_model():
 def get_feature_vector(model, x, layer):
     # choose certain layer and make predictions and deliver vector
     model = tf.keras.models.Model(inputs=model.input, outputs=model.get_layer(layer).output)
-
     predictions = model.predict(x)
     return predictions
 
@@ -49,22 +48,22 @@ def preform_svm(x,y,x_val,y_val):
     return clf
 
 def auc_svm(X_train,y_train,X_test,y_test, plot = True):
-    try:
-        s = X_train.shape
-        X_train = np.array(X_train).reshape(-1,int(s[1])*int(s[2]))
-        X_test = np.array(X_test).reshape(-1,int(s[1])*int(s[2]))
-    except:
-        print('Flat: {}'.format(len(X_train.shape)==2))
-
+    # try:
+    #     s = X_train.shape
+    #     X_train = np.array(X_train).reshape(-1,int(s[1])*int(s[2]))
+    #     X_test = np.array(X_test).reshape(-1,int(s[1])*int(s[2]))
+    # except:
+    #     print('Flat: {}'.format(len(X_train.shape)==2))
+    print('1')
     n_classes = y_train.shape[1]
 
     # shuffle and split training and test sets
 
     # Learn to predict each class against the other
     classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True))
-
+    print('2')
     y_score = classifier.fit(X_train, y_train).decision_function(X_test)
-
+    print('3')
     # Compute ROC curve and ROC area for each class
     fpr = dict()
     tpr = dict()
@@ -72,12 +71,12 @@ def auc_svm(X_train,y_train,X_test,y_test, plot = True):
     for i in range(n_classes):
         fpr[i], tpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])
         roc_auc[i] = auc(fpr[i], tpr[i])
-
+    print('4')
     # Compute micro-average ROC curve and ROC area
     fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), y_score.ravel())
     roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
 
-
+    print('5')
     # Compute macro-average ROC curve and ROC area
 
     # First aggregate all false positive rates
@@ -96,7 +95,7 @@ def auc_svm(X_train,y_train,X_test,y_test, plot = True):
     roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
 
 
-
+    print('6')
     # Compute macro-average ROC curve and ROC area
 
     # First aggregate all false positive rates
@@ -109,12 +108,12 @@ def auc_svm(X_train,y_train,X_test,y_test, plot = True):
 
     # Finally average it and compute AUC
     mean_tpr /= n_classes
-
+    print('7')
     fpr["macro"] = all_fpr
     tpr["macro"] = mean_tpr
     roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
     AUC = auc(fpr["macro"], tpr["macro"])
-
+    print('8') 
     if plot:
         plt.figure()
         lw = 2

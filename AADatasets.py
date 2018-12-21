@@ -266,7 +266,7 @@ def import_chest(path, img_size_x,img_size_y, norm, color):
     if norm:
         x = x/ 255.0
 
-    print(f"This Dog_Cat dataset contains the following: \nTotal length Dataset = {len(x)} ")
+    print(f"This Chest dataset contains the following: \nTotal length Dataset = {len(x)} ")
     return x, y
 
 def make_pre_train_classes(Y, numb_classes = None):
@@ -293,6 +293,7 @@ def make_pre_train_classes(Y, numb_classes = None):
 
 def get_data(params):
     random.seed(params["RandomSeed"])
+
     try:
         print("Try to import pickle")
         if params["Data"] == 'ISIC':
@@ -305,22 +306,17 @@ def get_data(params):
                 zippy2 = list(pickle.load(open( f"{params['pickle_path']}_part2.p", "rb" )))
                 zippy.extend(zippy2)
         print("succeed to import pickle")
-        random.shuffle(zippy)
-        x,y = zip(*zippy)
-        x = np.array(x)
-        y = np.array(y)
-        x_test,y_test,x,y = val_split(x,y, params["test_size"])
-        x_val,y_val,x,y = val_split(x,y, params["val_size"])
+
 
     except:
         print("Failed to import pickle")    
-        if params["Data"] == 'DogCat':
+        if params["Data"] == 'DogCat' or params["Data"] == 'Breast':
             x,y = import_dogcat(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
         elif params["Data"] == 'KaggleDR':
             x,y = import_kaggleDR(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
         elif params["Data"] == 'ISIC':
             x,y = import_melanoom(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"],classes =params["data_name"])
-        elif params["Data"] == 'Chest':
+        elif params["Data"] == 'Chest' or params["Data"] == "Blood":
             x,y = import_chest(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
         x = list(x)
         y = list(y)
@@ -336,15 +332,14 @@ def get_data(params):
             pickle.dump( zip1, open( f"{params['pickle_path']}_part1.p", "wb" ))
             pickle.dump( zip2, open( f"{params['pickle_path']}_part2.p", "wb" ))
             zip_both = zip(x,y)
-
         zippy = list(zip_both)
-        random.shuffle(zippy)
-        x,y = zip(*zippy)
-        x = np.array(x)
-        y = np.array(y)
-        x_test,y_test,x,y = val_split(x,y, params["test_size"])
-        x_val,y_val,x,y = val_split(x,y, params["val_size"])
-    return x,y,x_val,y_val,x_test,y_test
+    print(" unzip")
+    random.shuffle(zippy)
+    x,y = zip(*zippy)
+    x = np.array(x)
+    y = np.array(y)
+
+    return x,y
 
 
 
@@ -463,3 +458,43 @@ def equal_data_run(y_new,x_new):
 
 def val_split(x,y, val_size):
     return x[:val_size] ,y[:val_size] ,x[val_size:] ,y[val_size:]
+
+def keep_class(x,y, classes):
+    Y = []
+    X = []
+    for i,j in zip(list(y),list(x)):
+        if list(i).index(1) in classes:
+            Y.append(i)
+            X.append(j)
+    return X,Y
+
+def equal_data_min(x,y):
+    d = count_classes(y)
+    if type(d) == dict:
+        l = list()
+        for key in d.keys():
+            l.append(d[key])
+        limit = min(l)
+    else:
+        limit = min(d)
+
+    back_to_num = list()
+    for i in list(y):
+        back_to_num.append(list(i).index(1))
+    
+    X = list()
+    Y = list()
+    d = dict()
+    for n,img in zip(back_to_num,zip(x,y)):
+        if n in d:
+            if d[n] >= limit:
+                continue
+            d[n] += 1
+            X.append(img[0])
+            Y.append(img[1])
+        else:
+            d[n] = 1
+            X.append(img[0])
+            Y.append(img[1])
+    return np.array(X),np.array(Y)
+
