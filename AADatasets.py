@@ -384,7 +384,7 @@ def determen_weights(classes):
     
     weights = dict()
     for c in list_class_index:
-        num = (int(sum(list_class_index)/c))
+        num = ((sum(list_class_index)/c))
         if num < 1:
             num = 1
         weights[list_class_index.index(c)] = float(num)
