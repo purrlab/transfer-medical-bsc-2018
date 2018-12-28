@@ -269,6 +269,71 @@ def import_chest(path, img_size_x,img_size_y, norm, color):
     print(f"This Chest dataset contains the following: \nTotal length Dataset = {len(x)} ")
     return x, y
 
+def import_blood(path, img_size_x,img_size_y, norm, color):
+    #DIR = r"C:\Users\Floris\Documents\Python scripts\PetImages"
+    try: 
+        types = list(os.listdir(path))
+        print('Directory found')
+    except:
+        print('Directory not Found')
+
+    training_data = list()
+    training_class = list()
+    
+
+    for type_set in types:
+        path2 = os.path.join(path, type_set)
+        cat = list(os.listdir(path2))
+
+        for category in cat:
+            class_num = cat.index(category)
+            path3 = os.path.join(path2, category)
+            start = time.time()
+            i = 0
+            size = len(list(os.listdir(path3)))
+            for img in os.listdir(path3):
+                try:
+                    if color:
+                        D = 3
+                        img_array = cv2.imread(os.path.join(path3,img), cv2.IMREAD_COLOR)
+                        new_array = cv2.resize(img_array,(img_size_x, img_size_y))
+                        
+                    else:
+                        D = 1
+                        img_array = cv2.imread(os.path.join(path3,img), cv2.IMREAD_GRAYSCALE)
+                        new_array = cv2.resize(img_array,(img_size_x, img_size_y))
+                        print("done")
+                    training_data.append(new_array)
+                    if class_num == 0:
+                        training_class.append([1,0,0,0])
+                    elif class_num == 1:
+                        training_class.append([0,1,0,0])
+                    elif class_num == 2:
+                        training_class.append([0,0,1,0])
+                    elif class_num == 3:
+                        training_class.append([0,0,0,1])
+                except Exception as e:
+                    pass
+                loading(size,i,start, "Chest data import")
+                i+=1
+
+            print("\n")
+
+    zip_list = list(zip(training_data,training_class))
+    random.shuffle(zip_list)
+    training_data,training_class = zip(*zip_list)
+    x = np.array(training_data).reshape(-1,img_size_x, img_size_y,D)
+    y = np.array(training_class).reshape(-1,len(cat))
+
+    if type(norm) != bool:
+        print("please enter 'boolean' for norm(alization)")
+
+    if norm:
+        x = x/ 255.0
+
+    print(f"This Chest dataset contains the following: \nTotal length Dataset = {len(x)} ")
+    return x, y
+
 def make_pre_train_classes(Y, numb_classes = None):
     '''
     zorgt voor classes op een manier dat een NN er mee kan werken, deze versie werkt op INTERGERS
@@ -316,8 +381,10 @@ def get_data(params):
             x,y = import_kaggleDR(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
         elif params["Data"] == 'ISIC':
             x,y = import_melanoom(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"],classes =params["data_name"])
-        elif params["Data"] == 'Chest' or params["Data"] == "Blood":
+        elif params["Data"] == 'Chest':
             x,y = import_chest(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
+        elif  params["Data"] == "Blood":
+            x,y = import_blood(params['file_path'], params['img_size_x'],params['img_size_y'], norm = params["norm"], color = params["color"])
         x = list(x)
         y = list(y)
         if params["Data"] == 'ISIC':

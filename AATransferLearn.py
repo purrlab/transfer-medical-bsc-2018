@@ -66,10 +66,10 @@ def auc_svm(X_train,y_train,X_test,y_test, plot = True):
     # for i in list_classes:
     #     back_to_num.append(list(i).index(1))
     #     y_test = back_to_num
-    X_train = X_train/X_train.max()
-    X_test = X_test/X_test.max()
+    X_train = X_train/255
+    X_test = X_test/255
 
-
+    print('SVM')
     # shuffle and split training and test sets
 
     # Learn to predict each class against the other
@@ -82,7 +82,7 @@ def auc_svm(X_train,y_train,X_test,y_test, plot = True):
     fpr = dict()
     tpr = dict()
     roc_auc = dict()
-    print(y_train.shape[1])
+
     n_classes = y_train.shape[1]
     for i in range(n_classes):
         fpr[i], tpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])

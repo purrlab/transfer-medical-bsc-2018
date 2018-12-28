@@ -12,20 +12,20 @@ from LabnotesDoc import *
 
 def run_target(params):
     x,y = get_data(params)
-    # x,y = keep_class(x,y,[0,1,2])
-    # x,y = equal_data_min(x,y)
+
+    # if params['norm']:
+    #     x = x/x.max()
 
     x_test,y_test,x,y = val_split(x,y, params["test_size"])
     x_val,y_val,x,y = val_split(x,y, params["val_size"])
     
-    # for method in m:
     config_desktop()
 
     model = make_model(x, y, params)
 
     if params["style"] == 'FT':
         weights = determen_weights(y)
-        H, score, model = train_model(model,x,y,x_val,y_val,x_test,y_test, params["epochs"], params["Batch_size"])
+        H, score, model = train_model(model,x,y,x_val,y_val,x_test,y_test, params["epochs"], params["Batch_size"], weights)
         predictions = get_feature_vector(model, x, layer = 'fc2')
         predictions_test = get_feature_vector(model, x_test, layer = 'fc2')
         score = auc_svm(predictions,y,predictions_test,y_test, plot = False)

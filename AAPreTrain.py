@@ -39,8 +39,8 @@ def make_model(x, y,params):
     for layer in vgg_conv.layers:
         print(layer, layer.trainable)
     print("END OF SUMMARY")
-    # opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.01, decay=0, nesterov=True)
-    vgg_conv.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])  #'auc'categorical_crossentropy
+    opt = tf.keras.optimizers.SGD(lr=0.001, momentum=0.01, decay=0, nesterov=True)
+    vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'categorical_crossentropy
     return vgg_conv
 
 def train_model(model,x_train,y_train,x_val,y_val,x_test,y_test, Epochs, Batch_size,weights_dict = None):
@@ -86,7 +86,8 @@ def data_generator_large_files(pathes, batch_size):
 
 def config_desktop():
     ## WHEN USING TF 1.5 or lower and GPU ###
-    config = tf.ConfigProto()               #
+    #                                       #
+    config = tf.ConfigProto()               #               
     config.gpu_options.allow_growth = True  #
     session = tf.Session(config=config)     #
     #########################################
