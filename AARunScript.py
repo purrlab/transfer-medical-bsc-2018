@@ -1,7 +1,29 @@
 from RunSource import run
 from RunTarget import run_target
-
 r= 2
+params = {"Data":'Nat',
+        "style":'none',
+        "model":'none',
+        'file_path':r"C:\natural_images",
+        'pickle_path':r"C:\pickles\Nat",
+        'model_path':r"C:\models\Epochs_",
+        "RandomSeed":r,
+        "doc_path":r"C:\Users\Flori\Documents\GitHub\t",
+        'img_size_x':224,
+        'img_size_y':224,
+        'norm':False,
+        'color':True, 
+        'pretrain':None, 
+        "equal_data":False, 
+        "shuffle":True, 
+        "epochs":50, 
+        "val_size":500,
+        "test_size":1000, 
+        "Batch_size":32
+        }
+
+run(params)
+
 params = {"Data":'CatDog',
         'file_path':r"C:\PetImages",
         'pickle_path':r"C:\pickles\CatDog",
@@ -154,5 +176,5 @@ params = {"Data":'Blood',
 #         "Batch_size":6
 #         }
 
-run_target(params)
+#run_target(params)
 

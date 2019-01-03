@@ -99,8 +99,9 @@ def plot_pre_train_result():
 def show_accuracy():
     # check if prediction is rigth using few images (i guess 4)
 
-def plot_results():
-    # make a graph using data from forloops on different configs (acc/pre_train_size)
+# def plot_layers(model.layer[0], x, y):
+#     filters = layer
+    
 
 def main():
     # small example to test script

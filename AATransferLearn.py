@@ -48,28 +48,11 @@ def preform_svm(x,y,x_val,y_val):
     return clf
 
 def auc_svm(X_train,y_train,X_test,y_test, plot = True):
-    # try:
-    #     s = X_train.shape
-    #     X_train = np.array(X_train).reshape(-1,int(s[1])*int(s[2]))
-    #     X_test = np.array(X_test).reshape(-1,int(s[1])*int(s[2]))
-    # except:
-    #     print('Flat: {}'.format(len(X_train.shape)==2))
 
-    
-    # back_to_num = list()
-    # list_classes = list(y_train)
-    # for i in list_classes:
-    #     back_to_num.append(list(i).index(1))
-    # y_train = back_to_num
-    # back_to_num = list()
-    # list_classes = list(y_test)
-    # for i in list_classes:
-    #     back_to_num.append(list(i).index(1))
-    #     y_test = back_to_num
     X_train = X_train/255
     X_test = X_test/255
 
-    print('SVM')
+    print('SVM is busy... this may take a while')
     # shuffle and split training and test sets
 
     # Learn to predict each class against the other

@@ -43,13 +43,18 @@ def make_model(x, y,params):
     vgg_conv.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])  #'auc'categorical_crossentropy
     return vgg_conv
 
-def train_model(model,x_train,y_train,x_val,y_val,x_test,y_test, Epochs, Batch_size,weights_dict = None):
+def train_model(model,x_train,y_train,x_val,y_val,x_test,y_test, params,weights_dict = None):
     # train models over AUC, for x epochs. make it loopable for further test. return plottable data
+    Epochs = params["epochs"]
+    Batch_size = params["Batch_size"]
 
     stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10)
-    # check = tf.keras.callbacks.ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-
-    H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_val,y_val),shuffle=True,  callbacks = [stop], class_weight = weights_dict)#,,callbacks =[check]
+    # stop2 = tf.keras.callbacks.EarlyStopping(monitor='val_acc', min_delta=0, patience=10, restore_best_weights=True)
+    # check = tf.keras.callbacks.ModelCheckpoint(r"C:\models\model-{epoch:03d}.h5", monitor='val_acc', verbose=1, save_best_only=True)
+    if params['stop'] == 'no':
+        H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_val,y_val),shuffle=True,  callbacks = [], class_weight = weights_dict)
+    else:
+        H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_val,y_val),shuffle=True,  callbacks = [stop], class_weight = weights_dict)#,,callbacks =[check]
     score = roc_auc_score(y_test, model.predict(x_test))
     print(' AUC of model = ' ,score)
     return H, score, model
@@ -70,19 +75,6 @@ def data_generator_large_files(pathes, batch_size):
             for batch in range(batches):
                 section = slice(batch*batch_size,(batch+1)*batch_size)
                 yield (x_train[section], y_train[section])
-                
-#Create and use:
-
-# gen = dataGenerator(['xaa', 'xab', 'xac', 'xad'], 50)
-# model.fit_generator(gen,
-#                     steps_per_epoch = expectedTotalNumberOfYieldsForOneEpoch
-#                     epochs = epochs)
-
-# Option 2
-# for epoch in range(20):
-#     for path in ['xaa', 'xab', 'xac', 'xad']:
-#         x_train, y_train = prepare_data(path)
-#         model.fit(x_train, y_train, batch_size=50, epochs=epoch+1, initial_epoch=epoch, shuffle=True)
 
 def config_desktop():
     ## WHEN USING TF 1.5 or lower and GPU ###
