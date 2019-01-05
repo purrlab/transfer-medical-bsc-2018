@@ -1,18 +1,18 @@
 MODE CON: COLS=200 LINES=50
-python run2.py 0002
-python run2.py 0012
-python run2.py 1002
-python run2.py 1012
-python run2.py 2002
-python run2.py 2012
-python run2.py 3002
-python run2.py 3012
-python run2.py 4002
-python run2.py 4012
-python run2.py 5002
-python run2.py 5012
-python run2.py 6002
-python run2.py 6012
-python run2.py 7002
-python run2.py 7012
+python run2.py 0412
+python run2.py 1412
+python run2.py 2412
+python run2.py 3412
+python run2.py 4412
+python run2.py 5412
+python run2.py 6412
+python run2.py 7412
 
+python run2.py 0402
+python run2.py 1402
+python run2.py 2402
+python run2.py 3402
+python run2.py 4402
+python run2.py 5402
+python run2.py 6402
+python run2.py 7402

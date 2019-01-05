@@ -19,7 +19,11 @@ def make_model(x, y,params):
         fine_tune = tf.keras.layers.Dense(y.shape[1], activation='sigmoid')(fine_tune)
         vgg_conv  = tf.keras.models.Model(inputs=vgg_conv.input, outputs=fine_tune)
 
-    elif params['model'] == "Chest" or params['model'] == "KaggleDR" or params['model'] == "CatDog":
+    elif params['model'] == "None":
+        c = int(y.shape[1])
+        vgg_conv = tf.keras.applications.VGG16(weights=None,input_shape = (x[0].shape), include_top=True, classes=c)        
+
+    else:
         print(params['model_path'][params['model']])
         with open(params['model_path'][params['model']], 'r') as json_file:
             loaded_model_json = json_file.read()
@@ -31,9 +35,6 @@ def make_model(x, y,params):
         fine_tune = tf.keras.layers.Dense(y.shape[1], activation='sigmoid')(loaded_model.output)
         vgg_conv  = tf.keras.models.Model(inputs=loaded_model.input, outputs=fine_tune)
 
-    else:
-        c = int(y.shape[1])
-        vgg_conv = tf.keras.applications.VGG16(weights=None,input_shape = (x[0].shape), include_top=True, classes=c)
     
     print("MODEL SUMMARY:")
     for layer in vgg_conv.layers:
@@ -50,11 +51,12 @@ def train_model(model,x_train,y_train,x_val,y_val,x_test,y_test, params,weights_
 
     stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10)
     # stop2 = tf.keras.callbacks.EarlyStopping(monitor='val_acc', min_delta=0, patience=10, restore_best_weights=True)
-    # check = tf.keras.callbacks.ModelCheckpoint(r"C:\models\model-{epoch:03d}.h5", monitor='val_acc', verbose=1, save_best_only=True)
+    check = tf.keras.callbacks.ModelCheckpoint(r"C:\models\model_temp.h5", monitor='val_acc', verbose=1, save_best_only=True)
     if params['stop'] == 'no':
         H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_val,y_val),shuffle=True,  callbacks = [], class_weight = weights_dict)
     else:
         H = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, validation_data=(x_val,y_val),shuffle=True,  callbacks = [stop], class_weight = weights_dict)#,,callbacks =[check]
+    # model.load_weights(r"C:\models\model_temp.h5")
     score = roc_auc_score(y_test, model.predict(x_test))
     print(' AUC of model = ' ,score)
     return H, score, model
