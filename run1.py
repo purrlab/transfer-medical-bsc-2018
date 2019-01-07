@@ -57,7 +57,7 @@ elif x == 1:
                 "equal_data":False, 
                 "shuffle":True, 
                 "epochs":50, 
-                "val_size":y*500,
+                "val_size":500,
                 "test_size":1000, 
                 "Batch_size":32,
                 "stop":'yes'
