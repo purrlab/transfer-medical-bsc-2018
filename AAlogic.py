@@ -26,13 +26,11 @@ from sklearn.multiclass import OneVsRestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_curve, auc,roc_auc_score
 
-from RunSource import *
-from RunTarget import *
+from AARunSource import *
+from AARunTarget import *
 from AADatasets import *
 from AAPreTrain import *
-from LabnotesDoc import *
-# from AARunScript import *
-# from AAAnalyseData import *
+from AALabnotesDoc import *
 from AATransferLearn import *
 
 
