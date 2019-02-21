@@ -12,8 +12,6 @@ This is the script of the final bacherlor project of Floris Fok
 
 ### Download all py files from github
 
-### Execute the run_source 
-
 ### Edit the params in your script to match the format, skip the xxx.
  params = {"Data":xxx,
          "data_name":xxx,
@@ -40,6 +38,8 @@ This is the script of the final bacherlor project of Floris Fok
 
 ### run run_batch.py
 use correct usage of "python run_batch.py iiii(i) run_style"
+* First run source data scripts (with exception of imagenet, these weights are from the web)
+* Secondly run the experiments
 
 
 # Abstract
