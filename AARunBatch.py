@@ -14,7 +14,7 @@
 import sys
 #checks correct usage
 if len(sys.argv) != 3:
-    print("\nUSAGE: python run1.py iiii(i) 'run_style'")
+    print("\nUSAGE: python run_batch.py iiii(i) 'run_style'")
     quit()
 
 from AARunTarget import run_target
@@ -159,6 +159,29 @@ elif data_num == 4:
                 "Batch_size":32,
                 "stop":'yes'
                 }
+elif data_num == 5:
+    params = {"Data":'CatDog',
+            "data_name":None,
+            'file_path':r"C:\PetImages",
+            "style":style[style_num],
+            "model":model[model_num],
+            'pickle_path':r"C:\pickles\CatDog",
+            'model_path':r"C:\models\Epochs_",
+            'doc_path':r"C:\Users\Flori\Documents\GitHub\t",
+            "RandomSeed":random_num,
+            'img_size_x':224,
+            'img_size_y':224,
+            'norm':True,
+            'color':True,
+            'pretrain':None,
+            "equal_data":False, 
+            "shuffle": True, 
+            "epochs": 50 , 
+            "val_size":3000,
+            "test_size":5000, 
+            "Batch_size": 32,
+            "stop":'yes'
+            }
 
 #run program
 if run_style == 'source':
