@@ -37,4 +37,4 @@ Decide on where you are going to track of all your tasks. This can be on Github 
 of creating tasks for yourself, such that each task can be completed in a few hours. This means the task has to have a verb, and have a definition of "complete".
 For example, "Summarize 5 papers on topic X". 
 
-If a todo comes up for you during the meeting, capture it straight away - either in your system, or write it on paper and add it to your system later. 
+If a todo comes up for you during the meeting, capture it straight away - either in your system, or write it on paper and add it to your system later.
