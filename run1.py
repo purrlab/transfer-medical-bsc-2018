@@ -8,10 +8,10 @@ data = ['two','three','two_combined']#data[y]
 style = ['FT', 'SVM']
 
 x = int(arg[0])
-d = int(arg[1])
+y  = int(arg[1])
 z = int(arg[2])
 r = int(arg[3])
-y = 4
+d = 4
 
 #"pickle_path":r"C:\pickles\save_melanoom_color_",
 
@@ -43,7 +43,7 @@ if x ==0:
 elif x == 1:
         params = {"Data":'Nat',
                 "style":'none',
-                "model":'none',
+                "model":'None',
                 'file_path':r"C:\natural_images",
                 'pickle_path':r"C:\pickles\Nat",
                 'model_path':r"C:\models\Epochs_50_Nat.json",
@@ -132,5 +132,5 @@ elif x == 4:
                 "Batch_size":32,
                 "stop":'yes'
                 }
-run_target(params)
-# run(params)
+run(params)
+# run_target(params)
