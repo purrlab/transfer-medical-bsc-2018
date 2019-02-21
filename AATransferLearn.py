@@ -13,17 +13,20 @@ from sklearn.preprocessing import label_binarize
 from sklearn.multiclass import OneVsRestClassifier
 from scipy import interp
 
-def load_model():
-    #make a quick fucntion for the imagenet pre trained VGG16
-    pass
-
 def get_feature_vector(model, x, layer):
-    # choose certain layer and make predictions and deliver vector
+    '''
+    choose certain layer and extract output of given vector
+    input: model, image data, layer
+    ouput: feature vector
+    '''
+    #resize model
     model = tf.keras.models.Model(inputs=model.input, outputs=model.get_layer(layer).output)
+    #get vector
     predictions = model.predict(x)
     return predictions
 
 def preform_svm(x,y,x_val,y_val):
+    # OLD SVM NO AUC (prototype)
     # preform the svm on the vector
     '''
     Simple support vector machine, Variable zijn nog aanpasbaar, maar nog niet mee geexperimenteerd. pakt automatisch een deel test en train. (afb moet vierkant zijn)
@@ -48,17 +51,20 @@ def preform_svm(x,y,x_val,y_val):
     return clf
 
 def auc_svm(X_train,y_train,X_test,y_test, plot = True):
-
+    '''
+    Simple support vector machine, setting are customizable, but didn't changes them during the experiment.
+    input: image vector or feature vector
+    output: classifier and accuarcy
+    '''
+    #normalize
     X_train = X_train/255
     X_test = X_test/255
 
-    print('SVM is busy... this may take a while')
-    # shuffle and split training and test sets
+    #warming message, large svm sets can take almost one hour to complete, but most are ready in 10min.
+    print('SVM is busy... this may take a while: DO NOT CLOSE PROGRAM')
 
-    # Learn to predict each class against the other
-    classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True)) #gamma=0.1,C=100,
-    # classifier = sklearn.svm.SVC(gamma=0.001,C=100)
-
+    # Learn to predict each class against the other # with: gamma=0.1,C=100,
+    classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True)) 
     y_score = classifier.fit(X_train, y_train).decision_function(X_test)
 
     # Compute ROC curve and ROC area for each class
@@ -77,7 +83,6 @@ def auc_svm(X_train,y_train,X_test,y_test, plot = True):
 
 
     # Compute macro-average ROC curve and ROC area
-
     # First aggregate all false positive rates
     all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
 
@@ -95,7 +100,6 @@ def auc_svm(X_train,y_train,X_test,y_test, plot = True):
 
 
     # Compute macro-average ROC curve and ROC area
-
     # First aggregate all false positive rates
     all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
 
@@ -106,25 +110,28 @@ def auc_svm(X_train,y_train,X_test,y_test, plot = True):
 
     # Finally average it and compute AUC
     mean_tpr /= n_classes
-
     fpr["macro"] = all_fpr
     tpr["macro"] = mean_tpr
     roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
     AUC = auc(fpr["macro"], tpr["macro"])
 
+    #plots figure (for testing)
     if plot:
         plt.figure()
         lw = 2
+
         plt.plot(fpr[2], tpr[2], color='darkorange',
                 lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[0])
         plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
+
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
         plt.title('Receiver operating characteristic example')
         plt.legend(loc="lower right")
-            # Plot all ROC curves
+
         plt.figure()
         plt.plot(fpr["micro"], tpr["micro"],
                 label='micro-average ROC curve (area = {0:0.2f})'''.format(roc_auc["micro"]),color='deeppink', linestyle=':', linewidth=4)
@@ -136,18 +143,14 @@ def auc_svm(X_train,y_train,X_test,y_test, plot = True):
             plt.plot(fpr[i], tpr[i], color=color, lw=lw,label='ROC curve of class {0} (area = {1:0.2f})'''.format(i, roc_auc[i]))
 
         plt.plot([0, 1], [0, 1], 'k--', lw=lw)
+
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
+
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
         plt.title('Some extension of Receiver operating characteristic to multi-class')
         plt.legend(loc="lower right")
+
         plt.show()
     return AUC
-
-def main():
-    # small example to test script
-    pass
-    
-if __name__ == '__main__':
-    main()
