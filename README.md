@@ -1,5 +1,7 @@
 # Welcome
-This is the script of the final bacherlor project of Floris Fok
+This is the script of the final bacherlor project of Floris Fok. This script allows transfer learning with both medical and non-medical datasets. It measures performance with AUC and has some fucntions in AAAnalyse to visualize the filters. This will determine if medical source data is required when applying transfer learning on medical target data. 
+
+Abstract and conclusion can be found below, a short explaination of how to use the script is given here. The whole script is supported by comments to explain what is happening, so everybody will be able to understand the script with some prior knowledge of python.
 
 # Script
 ### How to use, first of all you need to download the correct datasets:
