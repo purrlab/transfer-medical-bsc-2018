@@ -1,10 +1,24 @@
-
+######################################################################################
+# Floris Fok
+# Final bacherlor project
+#
+# 2019 febuari
+# Transfer learning from medical and non medical data sets to medical target data
+#
+# ENJOY
+######################################################################################
+# Functions concering analysing of data, for testing and visualizing
+# TIP: Use jupyter notebook for visualisation, the functions are not supported with
+# any logic, 'some' manual work has to be done. I made all images with jupyter.
+######################################################################################
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 import tensorflow as tf
 import sklearn
 from sklearn import datasets, svm, metrics
+from scipy.misc import imsave
+import numpy as np
 
 def conf_matrix(model, x_test,y_test):
     """
@@ -129,8 +143,6 @@ def vis_weights(filter_size, model, layer_name = 'block1_conv1',filter_index = 0
     # this function returns the loss and grads given the input picture
     iterate = K.function([input_img], [loss, grads])
 
-    import numpy as np
-
     step= 1.
 
     # we start from a gray image with some noise
@@ -145,8 +157,6 @@ def vis_weights(filter_size, model, layer_name = 'block1_conv1',filter_index = 0
     for i in range(20):
         loss_value, grads_value = iterate([input_img_data])
         input_img_data += grads_value * step
-
-    from scipy.misc import imsave
 
     # util function to convert a tensor into a valid image
     def deprocess_image(x):
@@ -184,7 +194,8 @@ def display_activation(layer_name = 'block1_conv1',model= applications.VGG16(inc
             ax[row][col].imshow(img)
             activation_index += 1
 
-
+#########################################################################################################
+################    NOT USED, BUT USEFUL IN FURTHER PROJECCTS ###########################################
 
 # def show_accuracy():
 #     # check if prediction is rigth using few images (i guess 4)

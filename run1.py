@@ -1,30 +1,58 @@
+
+######################################################################################
+# Floris Fok
+# Final bacherlor project
+#
+# 2019 febuari
+# Transfer learning from medical and non medical data sets to medical target data
+#
+# ENJOY
+######################################################################################
+# Helper file for running experiments
+# TIP: USE batch scripts
+######################################################################################
+
+import sys
+#checks correct usage
+if len(sys.argv) != 3:
+    print("\nUSAGE: python run1.py iiii(i) 'run_style'")
+    quit()
+
 from RunTarget import run_target
 from RunSource import run
-import sys
+
+#difine number string
 arg = sys.argv[1]
 
+#translate numbers to settings
 model = ["imagenet","Chest","CatDog","KaggleDR","Nat",'None']
 data = ['two','three','two_combined']#data[y]
 style = ['FT', 'SVM']
 
-x = int(arg[0])
-y  = int(arg[1])
-z = int(arg[2])
-r = int(arg[3])
-d = 4
+#define argument numbers, just short to write
+data_num = int(arg[0])
+model_num  = int(arg[1])
+style_num = int(arg[2])
+random_num = int(arg[3])
+#if a fifth argument is given, define it
+try:
+    sub_data_num = int(arg[4])
+except:
+    if data_num == 0:
+        print("You need a fifth argument to run ISIC")
 
-#"pickle_path":r"C:\pickles\save_melanoom_color_",
+run_style = sys.argv[2]
 
-# run_target(params)
-if x ==0:
+# select paramset
+if data_num ==0:
         params = {"Data":'ISIC',
-                "data_name":data[d],
-                "style":style[z],
-                "model":model[y],
+                "data_name":data[sub_data_num],
+                "style":style[style_num],
+                "model":model[model_num],
                 "file_path":r"C:\ISIC",
                 "pickle_path":r"C:\pickles\save_melanoom_color_",
                  "model_path":{'Nat':r"C:\models\Epochs_50_Nat.json","KaggleDR":r"C:\models\Epochs_50_kaggleDR.json","Chest":r"C:\models\Epochs_50_Chest.json", "CatDog":r"C:\models\Epochs_40_CatDog.json" },
-                "RandomSeed":r,
+                "RandomSeed":random_num,
                 "doc_path":r"C:\Users\Flori\Documents\GitHub\t",
                 'img_size_x':224,
                 'img_size_y':224,
@@ -40,14 +68,14 @@ if x ==0:
                 "stop":'yes'
                 }
 
-elif x == 1:
+elif data_num == 1:
         params = {"Data":'Nat',
                 "style":'none',
                 "model":'None',
                 'file_path':r"C:\natural_images",
                 'pickle_path':r"C:\pickles\Nat",
                 'model_path':r"C:\models\Epochs_50_Nat.json",
-                "RandomSeed":r,
+                "RandomSeed":random_num,
                 "doc_path":r"C:\Users\Flori\Documents\GitHub\t",
                 'img_size_x':224,
                 'img_size_y':224,
@@ -63,15 +91,15 @@ elif x == 1:
                 "stop":'yes'
                 }
 
-elif x == 2:
+elif data_num == 2:
         params = {"Data":'Blood',
                 "data_name":None,
-                "style":style[z],
-                "model":model[y],
+                "style":style[style_num],
+                "model":model[model_num],
                 "file_path":r"C:\blood-cells",
                 "pickle_path":r"C:\pickles\Blood",
                 "model_path":{"Nat":r"C:\models\Epochs_50_Nat.json","KaggleDR":r"C:\models\Epochs_50_kaggleDR.json","Chest":r"C:\models\Epochs_50_Chest.json", "CatDog":r"C:\models\Epochs_40_CatDog.json" },
-                "RandomSeed":r,
+                "RandomSeed":random_num,
                 "doc_path":r"C:\Users\Flori\Documents\GitHub\t",
                 'img_size_x':224,
                 'img_size_y':224,
@@ -86,15 +114,15 @@ elif x == 2:
                 "Batch_size":32,
                 "stop":'yes'
                 }
-elif x == 3:
+elif data_num == 3:
          params = {"Data":'Chest',
                 "data_name":None,
-                "style":style[z],
-                "model":model[y],
+                "style":style[style_num],
+                "model":model[model_num],
                 "file_path":r"C:\chest_xray",
                 "pickle_path":r"C:\pickles\Chest_int",
                 "model_path":{"Nat":r"C:\models\Epochs_50_Nat.json","KaggleDR":r"C:\models\Epochs_50_kaggleDR.json","Chest":r"C:\models\Epochs_50_Chest.json", "CatDog":r"C:\models\Epochs_40_CatDog.json" },
-                "RandomSeed":r,
+                "RandomSeed":random_num,
                 "doc_path":r"C:\Users\Flori\Documents\GitHub\t",
                 'img_size_x':224,
                 'img_size_y':224,
@@ -109,15 +137,15 @@ elif x == 3:
                 "Batch_size":32,
                 "stop":'yes'
                 }
-elif x == 4:
+elif data_num == 4:
         params = {"Data":'KaggleDR',
                 "data_name":None,
-                "style":style[z],
-                "model":model[y],
+                "style":style[style_num],
+                "model":model[model_num],
                 "file_path":r"C:\KaggleDR",
                 "pickle_path":r"C:\pickles\KaggleDR",
                 "model_path":{"Nat":r"C:\models\Epochs_50_Nat.json","KaggleDR":r"C:\models\Epochs_50_kaggleDR.json","Chest":r"C:\models\Epochs_50_Chest.json", "CatDog":r"C:\models\Epochs_40_CatDog.json" },
-                "RandomSeed":r,
+                "RandomSeed":random_num,
                 "doc_path":r"C:\Users\Flori\Documents\GitHub\t",
                 'img_size_x':224,
                 'img_size_y':224,
@@ -132,5 +160,11 @@ elif x == 4:
                 "Batch_size":32,
                 "stop":'yes'
                 }
-run(params)
-# run_target(params)
+
+#run program
+if run_style == 'source':
+    run(params)
+elif run_style == 'target':
+    run_target(params)
+else:
+    print('Run Style Unknown')

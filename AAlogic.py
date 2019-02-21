@@ -86,19 +86,27 @@ def test():
 
     model = make_model(x, y, params)
     print("make_model = OK")
+
     weights = determen_weights(y)
     print("determen_weights = OK")
+
     H, score, model = train_model(model, x, y, x_val, y_val, x_test, y_test, params, weights_dict = None)
     print("train_model = OK")
+
     predictions = get_feature_vector(model, x, layer = 'fc2')
     predictions_test = get_feature_vector(model, x_test, layer = 'fc2')
     print("get_feature_vector = OK")
+
     score = auc_svm(predictions, y, predictions_test, y_test, plot = False)
     print("auc_svm = OK") 
-    results = {'score':score,"acc_epoch":H.history['acc'],"val_acc_epoch":H.history['val_acc'],"loss_epoch":H.history['loss'],"vall_loss_epoch":H.history['val_loss'],'data_name':data_name,'method':method,'style':style}
+
+    results = {'score':score,"acc_epoch":H.history['acc'],"val_acc_epoch":H.history['val_acc'],
+               "loss_epoch":H.history['loss'],"vall_loss_epoch":H.history['val_loss'],
+               'data_name':data_name,'method':method,'style':style}
 
     doc(params, results, H, params["doc_path"])
     print("doc = OK")
+
     print("ALL WAS OK")
 
 if __name__ == '__main__':

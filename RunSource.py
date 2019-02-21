@@ -1,3 +1,14 @@
+######################################################################################
+# Floris Fok
+# Final bacherlor project
+#
+# 2019 febuari
+# Transfer learning from medical and non medical data sets to medical target data
+#
+# ENJOY
+######################################################################################
+# Logic of pretraining and convential training
+######################################################################################
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,7 +23,8 @@ from LabnotesDoc import *
 
 
 def run(params):
-    """ Run reference experiment or make a pre-trained model
+    """ 
+    Run reference experiment or make a pre-trained model, All the logic takes place here
     Input: params(dict)
     Output: Model saved in json and h5, txt and figure.
     """
@@ -20,6 +32,7 @@ def run(params):
     ## Allow expension of VRAM ##
     # fixes allowcation problems
     config_desktop()
+
     # A data generator could also work, but is much slower. 
     # If Vram or Ram of your computer is not large enough, please do use a data generator.
 
@@ -30,6 +43,7 @@ def run(params):
    
     ## Make VGG16 model, with three additional dense layers to fit class count ##
     model = make_model(x, y, params)
+
     ## Weights are determined bye differences in classes in the training data, currently with float accuracy ##
     weights = determen_weights(y)
     H, score, model = train_model(model,x,y,x_val,y_val,x_test,y_test, params, weights)

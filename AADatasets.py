@@ -1,4 +1,14 @@
-
+######################################################################################
+# Floris Fok
+# Final bacherlor project
+#
+# 2019 febuari
+# Transfer learning from medical and non medical data sets to medical target data
+#
+# ENJOY
+######################################################################################
+# Functions concering Data handeling
+######################################################################################
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
