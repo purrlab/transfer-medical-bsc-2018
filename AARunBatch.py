@@ -181,7 +181,7 @@ elif data_num == 5:
             "test_size":5000, 
             "Batch_size": 32,
             "stop":'yes'
-            }
+            }   
 
 #run program
 if run_style == 'source':
