@@ -43,6 +43,9 @@ use correct usage of "python run_batch.py iiii(i) run_style"
 * First run source data scripts (with exception of imagenet, these weights are from the web)
 * Secondly run the experiments
 
+## figs file
+Here you can find the visualisations made in jupyter with the functions found in AAAnalyse.py
+
 
 # Abstract
 Normally, deep neural networks in medical image analysis take a large amount of data to be effective. Medical data sets, which are frequently smaller then other image data sets, are therefore more difficult to use. Transfer learning is a method that utilizes knowledge learned from the source data to help classify the target data. This method demonstrates to work effectively with small medical datasets. There is still, however, some ambiguity if transfer learning from non-medical data is effective for medical data. In this paper, we compare the performance of transfer learning from non-medical and medical source data to medical target data. To generalize the experiment, we experiment with two transfer learning methods, feature extraction and fine-tuning and compare them with conventional training.The area under the ROC (receiver operating characteristic) curve of the classified target data is used to compare the experiments, which functions as a measurement for performance. Beside analysing the results, we also visualizing the filters of convolutional neural network (CNN), which deepens the understanding of the results. It turns out, transfer learning with both medical and non-medial data on average improves performance. Fine tuning outperforms the other transfer learning method in this paper. In addition, the filters from a pre-trained CNN correlate with the performance of transfer learning and we obtained a better understanding of why certain models achieve better performance when using transfer learning. With this knowledge, proposing different data characteristics to be researched to extend this understanding further.
